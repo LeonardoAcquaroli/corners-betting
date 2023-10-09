@@ -53,7 +53,7 @@ st.dataframe(get_aggregated_data(driver=driver))
 # 2
 # Single teams tables
 # %%
-team_codes = pd.read_csv(r"C:\Users\leoac\OneDrive - Università degli Studi di Milano\Data science\Football\Betting\Corners\team_codes\teams.csv")
+team_codes = pd.read_csv("https://raw.githubusercontent.com/LeonardoAcquaroli/corners-betting/main/team_codes/teams_23-24.csv")
 
 # %%
 def corners_for():
@@ -139,8 +139,8 @@ conditions = [
     (next_fixtures['Corners outcome'] == next_fixtures['Away'])]
 next_fixtures['Corners outcome'] = np.where(conditions[0], 'X', np.where(conditions[1], '1', '2'))
 # Add forecast reliability calculated as the difference between the significance threshold (45.405 or 50) and the p_value for each game
-reliabilities = [round( ((45.405 - p) / 45.405)*100, 2 ) if p <= 45.405 else round( ((50 - p) / 50)*100, 2 ) for p in p_values]
+sign_level = 90.81
+reliabilities = [round( ((sign_level/2 - p) / sign_level/2)*100, 2 ) if p <= sign_level/2 else round( ((50 - p) / 50)*100, 2 ) for p in p_values]
 next_fixtures['Reliability of the forecast'] = reliabilities
 next_fixtures.set_index('Wk', inplace=True)
 st.dataframe(next_fixtures)
-
