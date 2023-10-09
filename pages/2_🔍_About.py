@@ -31,6 +31,6 @@ The predictions are computed through a hypothesis test (a t-test on independent 
 
 # add the image of the equations
 st.markdown(prediction_desc)
-st.image(r"C:\Immagini\Catture di schermata\Screenshot 2023-10-09 230523.png")
+st.image(r"https://github.com/LeonardoAcquaroli/corners-betting/blob/main/reliability_formula.png?raw=true")
 
 
