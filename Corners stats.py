@@ -3,6 +3,7 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import chromedriver_autoinstaller
 # Web scraping proprietary library
 from import_MyWebScrapingTools import *
 # # Data
@@ -13,7 +14,8 @@ import streamlit as st
 # Strings handling
 from io import StringIO
 # %%
-mws = import_MyWebScrapingTools().MyWsTools(chromedriver_executable_path=r"https://github.com/LeonardoAcquaroli/corners-betting/blob/main/chromedriver.exe?raw=true", driver_headless=True, driver_loglevel3=True, driver_noImg=True)
+# chromedriver_autoinstaller.install()
+mws = import_MyWebScrapingTools().MyWsTools(chromedriver_executable_path="https://github.com/LeonardoAcquaroli/corners-betting/blob/main/chromedriver.exe?raw=true", driver_headless=True, driver_loglevel3=True, driver_noImg=True)
 driver = mws.driver
 #%%
 ####### wait utility
