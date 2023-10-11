@@ -13,7 +13,7 @@ import streamlit as st
 # Strings handling
 from io import StringIO
 # %%
-mws = import_MyWebScrapingTools().MyWsTools(chromedriver_executable_path=r"https://github.com/LeonardoAcquaroli/corners-betting/blob/main/chromedriver.exehttps://github.com/LeonardoAcquaroli/corners-betting/blob/main/chromedriver.exe?raw=true", driver_headless=True, driver_loglevel3=True, driver_noImg=True)
+mws = import_MyWebScrapingTools().MyWsTools(chromedriver_executable_path=r"https://github.com/LeonardoAcquaroli/corners-betting/blob/main/chromedriver.exe?raw=true", driver_headless=True, driver_loglevel3=True, driver_noImg=True)
 driver = mws.driver
 #%%
 ####### wait utility
