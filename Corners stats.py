@@ -3,7 +3,6 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import chromedriver_autoinstaller
 # Web scraping proprietary library
 from import_MyWebScrapingTools import *
 # # Data
