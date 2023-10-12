@@ -4,6 +4,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 
 class MyWsTools():
     
@@ -19,7 +21,8 @@ class MyWsTools():
             if driver_noImg == True:
                 chrome_options.add_argument('--blink-settings=imagesEnabled=false')
             #### service
-            chrome_service = webdriver.ChromeService(executable_path=executable_path)
+            # chrome_service = webdriver.ChromeService(ChromeDriverManager().install())
+            chrome_service = Service(ChromeDriverManager().install())
             #### webdriver
             driver = webdriver.Chrome(options=chrome_options, service=chrome_service)
             return driver
