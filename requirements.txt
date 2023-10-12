@@ -1,6 +1,10 @@
 # Web scraping libraries
-chromedriver_autoinstaller
 selenium
+webdriver-manager
+
+# Importing custom modules
+importlib-metadata
+requests
 
 # Data
 pandas
@@ -8,5 +12,9 @@ pandas
 # Web app
 streamlit
 
+# Stats
+scipy
+
 # Strings handling
 # StringIO
+# requirements.txt
