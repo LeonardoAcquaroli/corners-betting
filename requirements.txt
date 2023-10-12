@@ -9,4 +9,4 @@ pandas
 streamlit
 
 # Strings handling
-StringIO
+# StringIO
