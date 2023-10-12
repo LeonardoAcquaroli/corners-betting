@@ -1,5 +1,4 @@
 # Web scraping libraries
-chromedriver_autoinstaller
 selenium
 
 # Data
@@ -7,6 +6,9 @@ pandas
 
 # Web app
 streamlit
+
+# Stats
+scipy
 
 # Strings handling
 # StringIO
