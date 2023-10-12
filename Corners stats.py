@@ -80,7 +80,7 @@ def corners_against():
     return corners_against_team
 
 st.markdown("### Match-by-match data")
-team = st.selectbox("Choose the team", pd.Series(team_codes.team_name))
+team = st.selectbox("Choose the team", pd.Series(team_codes['team_name']))
 if team != "":
     code = team_codes.team_code[team_codes.team_name == team].reset_index(drop=True)[0]
 def single_team(code, team):
