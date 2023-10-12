@@ -11,7 +11,7 @@ from t_test import *
 # Web app
 import streamlit as st
 # Strings handling
-from io import StringIO
+# from io import StringIO
 # %%
 # chromedriver_autoinstaller.install()
 # mws = import_MyWebScrapingTools().MyWsTools(chromedriver_executable_path="https://github.com/LeonardoAcquaroli/corners-betting/blob/main/chromedriver.exe?raw=true", driver_headless=True, driver_loglevel3=True, driver_noImg=True)
@@ -28,8 +28,8 @@ def get_aggregated_data(driver):
     table_for = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="stats_squads_passing_types_for"]')))
     table_against = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="stats_squads_passing_types_against"]')))
     # Parse the HTML table using Pandas
-    corners_for_aggregated = pd.read_html(StringIO(table_for.get_attribute('outerHTML')))[0]
-    corners_against_aggregated = pd.read_html(StringIO(table_against.get_attribute('outerHTML')))[0]
+    corners_for_aggregated = pd.read_html((table_for.get_attribute('outerHTML')))[0]
+    corners_against_aggregated = pd.read_html((table_against.get_attribute('outerHTML')))[0]
     # Process the data
     # I should use a function the preprocess both in the same way
     def preprocessing(df):
@@ -60,7 +60,7 @@ team_codes = pd.read_csv("https://raw.githubusercontent.com/LeonardoAcquaroli/co
 # %%
 def corners_for():
     corners_for_team_table = wait.until(EC.presence_of_element_located((By.ID, 'matchlogs_for')))
-    corners_for_team = pd.read_html(StringIO(corners_for_team_table.get_attribute('outerHTML')))[0]
+    corners_for_team = pd.read_html((corners_for_team_table.get_attribute('outerHTML')))[0]
     columns = corners_for_team.columns.droplevel(0) # cut out the first header of the multi Index
     corners_for_team.columns = columns
     corners_for_team = corners_for_team[["Date","Round","Venue","Result","GF","GA","Opponent","CK"]] # select only the important columns
@@ -70,7 +70,7 @@ def corners_for():
 
 def corners_against():
     corners_against_team_table = wait.until(EC.presence_of_element_located((By.ID, 'matchlogs_against')))
-    corners_against_team = pd.read_html(StringIO(corners_against_team_table.get_attribute('outerHTML')))[0]
+    corners_against_team = pd.read_html((corners_against_team_table.get_attribute('outerHTML')))[0]
     columns = corners_against_team.columns.droplevel(0) # cut out the first header of the multi Index
     corners_against_team.columns = columns
     corners_against_team = corners_against_team[["Date","Round","Venue","Result","GF","GA","Opponent","CK"]] # select only the important columns
@@ -124,7 +124,7 @@ def t_test_predictions(teamA, teamB, alpha = 90.81):
 # %%
 driver.get('https://fbref.com/en/comps/11/schedule/Serie-A-Scores-and-Fixtures')
 fixtures_table = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="sched_2023-2024_11_1"]')))
-fixtures =  pd.read_html(StringIO(fixtures_table.get_attribute('outerHTML')))[0]
+fixtures =  pd.read_html((fixtures_table.get_attribute('outerHTML')))[0]
 fixtures = fixtures[fixtures.Wk.isna() == False] # delete the grey blank rows to separate gameweeks
 fixtures = fixtures[fixtures.Score.isna()] # drop the played matches
 fixtures = fixtures.reset_index(drop=True) # reset index
