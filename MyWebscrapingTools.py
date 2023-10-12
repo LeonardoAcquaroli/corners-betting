@@ -10,8 +10,8 @@ from webdriver_manager.chrome import ChromeDriverManager
 class MyWsTools():
     
     # Initialization arguments
-    def __init__(self, chromedriver_executable_path, driver_headless=True, driver_loglevel3=True, driver_noImg=True):
-        def init_driver(executable_path=chromedriver_executable_path):
+    def __init__(self, driver_headless=True, driver_loglevel3=True, driver_noImg=True):
+        def init_driver():
             #### options
             chrome_options = Options()
             if driver_headless == True:

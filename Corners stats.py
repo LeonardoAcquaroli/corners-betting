@@ -15,7 +15,7 @@ from io import StringIO
 # %%
 # chromedriver_autoinstaller.install()
 # mws = import_MyWebScrapingTools().MyWsTools(chromedriver_executable_path="https://github.com/LeonardoAcquaroli/corners-betting/blob/main/chromedriver.exe?raw=true", driver_headless=True, driver_loglevel3=True, driver_noImg=True)
-mws = import_MyWebScrapingTools().MyWsTools(chromedriver_executable_path=r"C:\Users\leoac\OneDrive - Università degli Studi di Milano\Data science\Football\Betting\Corners\corners-betting\chromedriver.exe", driver_headless=True, driver_loglevel3=True, driver_noImg=True)
+mws = import_MyWebScrapingTools().MyWsTools()
 driver = mws.driver
 #%%
 ####### wait utility
