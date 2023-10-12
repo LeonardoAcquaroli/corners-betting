@@ -1,5 +1,10 @@
 # Web scraping libraries
 selenium
+webdriver-manager
+
+# Importing custom modules
+importlib-metadata
+requests
 
 # Data
 pandas
@@ -12,3 +17,4 @@ scipy
 
 # Strings handling
 # StringIO
+# requirements.txt
