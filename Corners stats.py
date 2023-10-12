@@ -13,7 +13,6 @@ import streamlit as st
 # Strings handling
 # from io import StringIO
 # %%
-# chromedriver_autoinstaller.install()
 # mws = import_MyWebScrapingTools().MyWsTools(chromedriver_executable_path="https://github.com/LeonardoAcquaroli/corners-betting/blob/main/chromedriver.exe?raw=true", driver_headless=True, driver_loglevel3=True, driver_noImg=True)
 mws = import_MyWebScrapingTools().MyWsTools()
 driver = mws.driver
