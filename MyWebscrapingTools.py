@@ -21,8 +21,8 @@ class MyWsTools():
             if driver_noImg == True:
                 chrome_options.add_argument('--blink-settings=imagesEnabled=false')
             #### service
-            # chrome_service = Service(ChromeDriverManager().install())
-            chrome_service = Service("chromedriver.exe")
+            # chrome_service = webdriver.ChromeService(ChromeDriverManager().install())
+            chrome_service = Service(ChromeDriverManager().install())
             #### webdriver
             driver = webdriver.Chrome(options=chrome_options, service=chrome_service)
             return driver

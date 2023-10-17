@@ -31,7 +31,7 @@ jobs:
         chmod +x chromedriver.exe
 
     - name: Run Streamlit App
-      run: streamlit run CornersBetting.py
+      run: streamlit run CornersBetting.py --server.port 8000 --server.address 0.0.0.0
       env:
         CHROMEDRIVER_PATH: ./chromedriver.exe
         PYTHONUNBUFFERED: 1
