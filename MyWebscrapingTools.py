@@ -10,7 +10,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 class MyWsTools():
     
     # Initialization arguments
-    def __init__(self, driver_headless=True, driver_loglevel3=True, driver_noImg=True):
+    def __init__(self, chromedriver_executable_path, driver_headless=True, driver_loglevel3=True, driver_noImg=True):
         def init_driver():
             #### options
             chrome_options = Options()
@@ -21,8 +21,8 @@ class MyWsTools():
             if driver_noImg == True:
                 chrome_options.add_argument('--blink-settings=imagesEnabled=false')
             #### service
-            # chrome_service = webdriver.ChromeService(ChromeDriverManager().install())
-            chrome_service = Service(ChromeDriverManager().install())
+            chrome_service = webdriver.ChromeService(executable_path=chromedriver_executable_path)
+            # chrome_service = Service(ChromeDriverManager().install())
             #### webdriver
             driver = webdriver.Chrome(options=chrome_options, service=chrome_service)
             return driver
