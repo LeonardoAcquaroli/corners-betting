@@ -17,4 +17,3 @@ scipy
 
 # Strings handling
 # StringIO
-# requirements.txt
