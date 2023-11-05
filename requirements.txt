@@ -8,6 +8,7 @@ requests
 
 # Data
 pandas
+lxml
 
 # Web app
 streamlit
