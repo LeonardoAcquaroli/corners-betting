@@ -13,7 +13,8 @@ import streamlit as st
 # Strings handling
 # from io import StringIO
 # %%
-mws = import_MyWebScrapingTools().MyWsTools(chromedriver_executable_path="https://raw.githubusercontent.com/LeonardoAcquaroli/corners-betting/main/chromedriver", driver_headless=True, driver_loglevel3=True, driver_noImg=True)
+# mws = import_MyWebScrapingTools().MyWsTools(chromedriver_executable_path="https://raw.githubusercontent.com/LeonardoAcquaroli/corners-betting/main/chromedriver", driver_headless=True, driver_loglevel3=True, driver_noImg=True)
+mws = import_MyWebScrapingTools().MyWsTools(chromedriver_executable_path=r"C:\Users\leoac\OneDrive - Università degli Studi di Milano\Data science\Football\Betting\Corners\corners-betting\chromedriver.exe", driver_headless=True, driver_loglevel3=True, driver_noImg=True)
 # mws = import_MyWebScrapingTools().MyWsTools()
 driver = mws.driver
 #%%
