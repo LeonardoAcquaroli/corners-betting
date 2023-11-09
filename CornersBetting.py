@@ -4,8 +4,12 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import shutil
+#---
+from selenium.webdriver.chrome.options import Options
+from selenium import webdriver
+#---
 # Web scraping proprietary library
-from import_MyWebScrapingTools import *
+# from import_MyWebScrapingTools import *
 # # Data
 import pandas as pd
 from t_test import *
@@ -19,10 +23,24 @@ import streamlit as st
 @st.cache_resource(show_spinner=False)
 def get_chromedriver_path():
     return shutil.which('chromedriver')
-mws = import_MyWebScrapingTools().MyWsTools(chromedriver_executable_path=get_chromedriver_path(), driver_headless=True, driver_loglevel3=True, driver_noImg=True)
-# mws = import_MyWebScrapingTools().MyWsTools(chromedriver_executable_path=r"C:\Users\leoac\OneDrive - Università degli Studi di Milano\Data science\Football\Betting\Corners\corners-betting\chromedriver.exe", driver_headless=True, driver_loglevel3=True, driver_noImg=True)
-# mws = import_MyWebScrapingTools().MyWsTools()
-driver = mws.driver
+# mws = import_MyWebScrapingTools().MyWsTools(chromedriver_executable_path=get_chromedriver_path(), driver_headless=True, driver_loglevel3=True, driver_noImg=True)
+def init_driver(chromedriver_executable_path, driver_headless=True, driver_loglevel3=True, driver_noImg=True):
+    #### options
+    chrome_options = Options()
+    if driver_headless == True:
+        chrome_options.add_argument('--headless')
+    if driver_loglevel3 == True:
+        chrome_options.add_argument('log-level=3')
+    if driver_noImg == True:
+        chrome_options.add_argument('--blink-settings=imagesEnabled=false')
+    #### service
+    chrome_service = webdriver.ChromeService(executable_path=chromedriver_executable_path)
+    # chrome_service = Service(ChromeDriverManager().install())
+    #### webdriver
+    driver = webdriver.Chrome(options=chrome_options, service=chrome_service)
+    return driver
+# driver = mws.driver
+driver = init_driver(get_chromedriver_path())
 #%%
 ####### wait utility
 wait = WebDriverWait(driver, 10)
