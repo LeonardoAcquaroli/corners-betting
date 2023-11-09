@@ -65,8 +65,7 @@ team_codes = pd.read_csv("https://raw.githubusercontent.com/LeonardoAcquaroli/co
 
 # %%
 def corners_for():
-    # corners_for_team_table = wait.until(EC.presence_of_element_located((By.ID, 'matchlogs_for')))
-    corners_for_team_table = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="matchlogs_for"]')))
+    corners_for_team_table = wait.until(EC.presence_of_element_located((By.ID, 'matchlogs_for')))
     corners_for_team = pd.read_html((corners_for_team_table.get_attribute('outerHTML')))[0]
     columns = corners_for_team.columns.droplevel(0) # cut out the first header of the multi Index
     corners_for_team.columns = columns
