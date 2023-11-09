@@ -54,7 +54,10 @@ def get_aggregated_data(driver):
     corners_aggregated['Total per match'] = corners_aggregated['Corners for'] + corners_aggregated['Corners against']
     corners_aggregated['Corners average difference'] = corners_aggregated['Corners for'] - corners_aggregated['Corners against']
     return corners_aggregated
-
+# 1
+st.markdown("### Team-wise aggregated data")
+st.dataframe(get_aggregated_data(driver=driver))
+driver.close()
 
 # 2
 # Single teams tables
@@ -63,7 +66,7 @@ team_codes = pd.read_csv("https://raw.githubusercontent.com/LeonardoAcquaroli/co
 
 # %%
 def corners_for():
-    corners_for_team_table = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, 'matchlogs_for')))
+    corners_for_team_table = wait.until(EC.presence_of_element_located((By.ID, 'matchlogs_for')))
     corners_for_team_table = wait.until(EC.presence_of_element_located((By.ID, 'matchlogs_for')))
     corners_for_team = pd.read_html((corners_for_team_table.get_attribute('outerHTML')))[0]
     columns = corners_for_team.columns.droplevel(0) # cut out the first header of the multi Index
@@ -90,6 +93,7 @@ if team != "":
 def single_team(code, team):
     driver.get(f"https://fbref.com/en/squads/{code}/2023-2024/matchlogs/c11/passing_types/{team}-Match-Logs-Serie-A")
     team_corners_table = pd.merge(corners_for(), corners_against(), left_index=True, right_index=True, suffixes=('', '_y'))
+    driver.close()
     team_corners_table = team_corners_table.loc[:, ~team_corners_table.columns.isin(["Date_y","Round_y","Venue_y","Result_y","GF_y","GA_y","Opponent_y"])]
     team_corners_table["Outcome"] = team_corners_table.apply(lambda row: 'Win' if row['Corners for'] > row['Corners against'] else ('Draw' if row['Corners for'] == row['Corners against'] else 'Defeat'), axis=1) # create 1X2 column
     team_corners_table["Corners difference"] = team_corners_table["Corners for"] - team_corners_table["Corners against"]
@@ -105,10 +109,6 @@ if team != "":
     st.dataframe(team_corners)
     st.write(f"Average number of corners for {team}: {mean_for}, Standard deviation of corners for {team}: {sd_for}")
     st.write(f"Average number of corners against {team}: {mean_against}, Standard deviation of corners against {team}: {sd_against}")
-
-# 1
-st.markdown("### Team-wise aggregated data")
-st.dataframe(get_aggregated_data(driver=driver))
 
 # 3
 st.markdown("### Corners average comparison and match prediction")
@@ -134,6 +134,7 @@ def t_test_predictions(teamA, teamB, alpha = 90.81):
 driver.get('https://fbref.com/en/comps/11/schedule/Serie-A-Scores-and-Fixtures')
 fixtures_table = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="sched_2023-2024_11_1"]')))
 fixtures =  pd.read_html((fixtures_table.get_attribute('outerHTML')))[0]
+driver.close()
 fixtures = fixtures[fixtures.Wk.isna() == False] # delete the grey blank rows to separate gameweeks
 fixtures = fixtures[fixtures.Score.isna()] # drop the played matches
 fixtures = fixtures.reset_index(drop=True) # reset index
