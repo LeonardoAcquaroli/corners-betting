@@ -16,7 +16,7 @@ import streamlit as st
 
 # -----------------------------------
 
-# @st.cache_resource(show_spinner=False)
+@st.cache_resource(show_spinner=False)
 def get_chromedriver_path():
     return shutil.which('chromedriver')
 mws = import_MyWebScrapingTools().MyWsTools(chromedriver_executable_path=get_chromedriver_path(), driver_headless=True, driver_loglevel3=True, driver_noImg=True)
@@ -25,7 +25,7 @@ driver = mws.driver
 ####### wait utility
 wait = WebDriverWait(driver, 10)
 # %%
-# @st.cache_resource() # FIXXXX
+@st.cache_resource(show_spinner=False)
 def get_aggregated_data(driver):
     driver.get("https://fbref.com/en/comps/11/passing_types/Serie-A-Stats")
     # Wait for the two tables to load
@@ -63,8 +63,8 @@ team_codes = pd.read_csv("https://raw.githubusercontent.com/LeonardoAcquaroli/co
 
 # %%
 def corners_for():
-    corners_for_team_table = wait.until(EC.presence_of_element_located((By.ID, 'matchlogs_for')))
-    corners_for_team_table = wait.until(EC.presence_of_element_located((By.ID, 'matchlogs_for')))
+    # corners_for_team_table = wait.until(EC.presence_of_element_located((By.ID, 'matchlogs_for')))
+    corners_for_team_table = driver.find_element((By.ID, 'matchlogs_for'))
     corners_for_team = pd.read_html((corners_for_team_table.get_attribute('outerHTML')))[0]
     columns = corners_for_team.columns.droplevel(0) # cut out the first header of the multi Index
     corners_for_team.columns = columns
