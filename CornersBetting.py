@@ -25,7 +25,7 @@ driver = mws.driver
 ####### wait utility
 wait = WebDriverWait(driver, 10)
 # %%
-@st.cache_resource(show_spinner=False)
+# @st.cache_resource(show_spinner=False)
 def get_aggregated_data(driver):
     driver.get("https://fbref.com/en/comps/11/passing_types/Serie-A-Stats")
     # Wait for the two tables to load
