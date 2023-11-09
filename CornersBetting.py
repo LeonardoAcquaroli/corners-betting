@@ -3,7 +3,6 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import time
 import shutil
 # Web scraping proprietary library
 from import_MyWebScrapingTools import *
@@ -20,7 +19,7 @@ import streamlit as st
 @st.cache_resource(show_spinner=False)
 def get_chromedriver_path():
     return shutil.which('chromedriver')
-mws = import_MyWebScrapingTools().MyWsTools(chromedriver_executable_path=get_chromedriver_path(), driver_headless=True, driver_loglevel3=True, driver_noImg=True)
+mws = import_MyWebScrapingTools().MyWsTools(chromedriver_executable_path=get_chromedriver_path(), driver_headless=False, driver_loglevel3=True, driver_noImg=True)
 # mws = import_MyWebScrapingTools().MyWsTools(chromedriver_executable_path=r"C:\Users\leoac\OneDrive - Università degli Studi di Milano\Data science\Football\Betting\Corners\corners-betting\chromedriver.exe", driver_headless=True, driver_loglevel3=True, driver_noImg=True)
 # mws = import_MyWebScrapingTools().MyWsTools()
 driver = mws.driver
@@ -91,7 +90,6 @@ if team != "":
     code = team_codes.team_code[team_codes.team_name == team].reset_index(drop=True)[0]
 def single_team(code, team):
     driver.get(f"https://fbref.com/en/squads/{code}/2023-2024/matchlogs/c11/passing_types/{team}-Match-Logs-Serie-A")
-    time.sleep(5)
     team_corners_table = pd.merge(corners_for(), corners_against(), left_index=True, right_index=True, suffixes=('', '_y'))
     team_corners_table = team_corners_table.loc[:, ~team_corners_table.columns.isin(["Date_y","Round_y","Venue_y","Result_y","GF_y","GA_y","Opponent_y"])]
     team_corners_table["Outcome"] = team_corners_table.apply(lambda row: 'Win' if row['Corners for'] > row['Corners against'] else ('Draw' if row['Corners for'] == row['Corners against'] else 'Defeat'), axis=1) # create 1X2 column
