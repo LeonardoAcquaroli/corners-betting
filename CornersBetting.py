@@ -47,7 +47,6 @@ wait = WebDriverWait(driver, 10)
 # %%
 # @st.cache_resource() # FIXXXX
 def get_aggregated_data(driver):
-    driver.get("https://www.google.com/search?q=ciao")
     driver.get("https://fbref.com/en/comps/11/passing_types/Serie-A-Stats")
     # Wait for the two tables to load
     table_for = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="stats_squads_passing_types_for"]')))
@@ -109,6 +108,7 @@ team = st.selectbox("Choose the team", pd.Series(team_codes['team_name']))
 if team != "":
     code = team_codes.team_code[team_codes.team_name == team].reset_index(drop=True)[0]
 def single_team(code, team):
+    driver.get("https://www.google.com/search?q=ciao")
     driver.get(f"https://fbref.com/en/squads/{code}/2023-2024/matchlogs/c11/passing_types/{team}-Match-Logs-Serie-A")
     team_corners_table = pd.merge(corners_for(), corners_against(), left_index=True, right_index=True, suffixes=('', '_y'))
     team_corners_table = team_corners_table.loc[:, ~team_corners_table.columns.isin(["Date_y","Round_y","Venue_y","Result_y","GF_y","GA_y","Opponent_y"])]
