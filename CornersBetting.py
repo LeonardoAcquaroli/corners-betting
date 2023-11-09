@@ -98,6 +98,7 @@ def single_team(code, team):
     return team_corners_table
 # %%
 if team != "":
+    st.write(team, code)
     team_corners = single_team(code, team)
     mean_for = round(team_corners["Corners for"].mean(),2)
     sd_for = round(team_corners["Corners for"].std(),2)
