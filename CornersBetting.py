@@ -54,9 +54,7 @@ def get_aggregated_data(driver):
     corners_aggregated['Total per match'] = corners_aggregated['Corners for'] + corners_aggregated['Corners against']
     corners_aggregated['Corners average difference'] = corners_aggregated['Corners for'] - corners_aggregated['Corners against']
     return corners_aggregated
-# 1
-st.markdown("### Team-wise aggregated data")
-st.dataframe(get_aggregated_data(driver=driver))
+
 
 # 2
 # Single teams tables
@@ -107,6 +105,10 @@ if team != "":
     st.dataframe(team_corners)
     st.write(f"Average number of corners for {team}: {mean_for}, Standard deviation of corners for {team}: {sd_for}")
     st.write(f"Average number of corners against {team}: {mean_against}, Standard deviation of corners against {team}: {sd_against}")
+
+# 1
+st.markdown("### Team-wise aggregated data")
+st.dataframe(get_aggregated_data(driver=driver))
 
 # 3
 st.markdown("### Corners average comparison and match prediction")
