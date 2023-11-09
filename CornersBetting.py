@@ -65,7 +65,8 @@ team_codes = pd.read_csv("https://raw.githubusercontent.com/LeonardoAcquaroli/co
 
 # %%
 def corners_for():
-    st.write(mws.element(xpath='/html/body/div[3]/div[7]/div[2]/div[2]/a', text=True))
+    st.write(mws.element(xpath='//*[@id="parid-20980"]/div/div[1]'),text=True)
+    # corners_for_team_table = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, 'matchlogs_for')))
     corners_for_team_table = wait.until(EC.presence_of_element_located((By.ID, 'matchlogs_for')))
     corners_for_team = pd.read_html((corners_for_team_table.get_attribute('outerHTML')))[0]
     columns = corners_for_team.columns.droplevel(0) # cut out the first header of the multi Index
@@ -90,7 +91,8 @@ team = st.selectbox("Choose the team", pd.Series(team_codes['team_name']))
 if team != "":
     code = team_codes.team_code[team_codes.team_name == team].reset_index(drop=True)[0]
 def single_team(code, team):
-    driver.get(f"https://fbref.com/en/squads/{code}/2023-2024/matchlogs/c11/passing_types/{team}-Match-Logs-Serie-A")
+    # driver.get(f"https://fbref.com/en/squads/{code}/2023-2024/matchlogs/c11/passing_types/{team}-Match-Logs-Serie-A")
+    driver.get(f"https://www.unimi.it/it")
     team_corners_table = pd.merge(corners_for(), corners_against(), left_index=True, right_index=True, suffixes=('', '_y'))
     team_corners_table = team_corners_table.loc[:, ~team_corners_table.columns.isin(["Date_y","Round_y","Venue_y","Result_y","GF_y","GA_y","Opponent_y"])]
     team_corners_table["Outcome"] = team_corners_table.apply(lambda row: 'Win' if row['Corners for'] > row['Corners against'] else ('Draw' if row['Corners for'] == row['Corners against'] else 'Defeat'), axis=1) # create 1X2 column
