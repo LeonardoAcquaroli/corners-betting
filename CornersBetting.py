@@ -24,7 +24,7 @@ mws = import_MyWebScrapingTools().MyWsTools(chromedriver_executable_path=get_chr
 driver = mws.driver
 #%%
 ####### wait utility
-wait = WebDriverWait(driver, 10000)
+wait = WebDriverWait(driver, 10)
 # %%
 # @st.cache_resource(show_spinner=False)
 def get_aggregated_data(driver):
@@ -64,7 +64,7 @@ team_codes = pd.read_csv("https://raw.githubusercontent.com/LeonardoAcquaroli/co
 
 # %%
 def corners_for():
-
+    time.sleep(20)
     corners_for_team_table = wait.until(EC.presence_of_element_located((By.ID, 'matchlogs_for')))
     corners_for_team = pd.read_html((corners_for_team_table.get_attribute('outerHTML')))[0]
     columns = corners_for_team.columns.droplevel(0) # cut out the first header of the multi Index
@@ -115,6 +115,7 @@ def t_test_predictions(teamA, teamB, alpha = 90.81):
     if ((teamA != "") & (teamB != "")):
         codeA = team_codes.team_code[team_codes.team_name == teamA].reset_index(drop=True)[0]
         codeB = team_codes.team_code[team_codes.team_name == teamB].reset_index(drop=True)[0]
+        time.sleep(20)
         cornersA = single_team(code=codeA, team=teamA)['Corners difference']
         cornersB = single_team(code=codeB, team=teamB)['Corners difference']
         p_value = t_test().t_test(a=cornersA, b=cornersB)*100
