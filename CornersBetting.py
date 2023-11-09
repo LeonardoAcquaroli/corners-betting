@@ -55,6 +55,7 @@ def get_aggregated_data(driver):
 # 1
 st.markdown("### Team-wise aggregated data")
 st.dataframe(get_aggregated_data(driver=driver))
+driver.close()
 
 # 2
 # Single teams tables
