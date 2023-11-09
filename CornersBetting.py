@@ -47,6 +47,7 @@ wait = WebDriverWait(driver, 10)
 # %%
 # @st.cache_resource() # FIXXXX
 def get_aggregated_data(driver):
+    driver.get("https://www.google.com/search?q=ciao")
     driver.get("https://fbref.com/en/comps/11/passing_types/Serie-A-Stats")
     # Wait for the two tables to load
     table_for = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="stats_squads_passing_types_for"]')))
