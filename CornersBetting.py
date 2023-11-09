@@ -19,7 +19,7 @@ import streamlit as st
 # @st.cache_resource(show_spinner=False)
 def get_chromedriver_path():
     return shutil.which('chromedriver')
-mws = import_MyWebScrapingTools().MyWsTools(chromedriver_executable_path=get_chromedriver_path(), driver_headless=False, driver_loglevel3=True, driver_noImg=True)
+mws = import_MyWebScrapingTools().MyWsTools(chromedriver_executable_path=get_chromedriver_path(), driver_headless=True, driver_loglevel3=True, driver_noImg=True)
 driver = mws.driver
 #%%
 ####### wait utility
