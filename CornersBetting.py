@@ -4,12 +4,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import shutil
-#---
-from selenium.webdriver.chrome.options import Options
-from selenium import webdriver
-#---
 # Web scraping proprietary library
-# from import_MyWebScrapingTools import *
+from import_MyWebScrapingTools import *
 # # Data
 import pandas as pd
 from t_test import *
@@ -23,24 +19,8 @@ import streamlit as st
 @st.cache_resource(show_spinner=False)
 def get_chromedriver_path():
     return shutil.which('chromedriver')
-# mws = import_MyWebScrapingTools().MyWsTools(chromedriver_executable_path=get_chromedriver_path(), driver_headless=True, driver_loglevel3=True, driver_noImg=True)
-def init_driver(chromedriver_executable_path, driver_headless=True, driver_loglevel3=True, driver_noImg=True):
-    #### options
-    chrome_options = Options()
-    if driver_headless == True:
-        chrome_options.add_argument('--headless')
-    if driver_loglevel3 == True:
-        chrome_options.add_argument('log-level=3')
-    if driver_noImg == True:
-        chrome_options.add_argument('--blink-settings=imagesEnabled=false')
-    #### service
-    chrome_service = webdriver.ChromeService(executable_path=chromedriver_executable_path)
-    # chrome_service = Service(ChromeDriverManager().install())
-    #### webdriver
-    driver = webdriver.Chrome(options=chrome_options, service=chrome_service)
-    return driver
-# driver = mws.driver
-driver = init_driver(get_chromedriver_path())
+mws = import_MyWebScrapingTools().MyWsTools(chromedriver_executable_path=get_chromedriver_path(), driver_headless=True, driver_loglevel3=True, driver_noImg=True)
+driver = mws.driver
 #%%
 ####### wait utility
 wait = WebDriverWait(driver, 10)
@@ -108,8 +88,8 @@ team = st.selectbox("Choose the team", pd.Series(team_codes['team_name']))
 if team != "":
     code = team_codes.team_code[team_codes.team_name == team].reset_index(drop=True)[0]
 def single_team(code, team):
+    driver = mws.driver
     driver.get(f"https://fbref.com/en/squads/{code}/2023-2024/matchlogs/c11/passing_types/{team}-Match-Logs-Serie-A")
-    st.write(wait.until(EC.presence_of_element_located((By.ID, 'matchlogs_for'))))
     team_corners_table = pd.merge(corners_for(), corners_against(), left_index=True, right_index=True, suffixes=('', '_y'))
     team_corners_table = team_corners_table.loc[:, ~team_corners_table.columns.isin(["Date_y","Round_y","Venue_y","Result_y","GF_y","GA_y","Opponent_y"])]
     team_corners_table["Outcome"] = team_corners_table.apply(lambda row: 'Win' if row['Corners for'] > row['Corners against'] else ('Draw' if row['Corners for'] == row['Corners against'] else 'Defeat'), axis=1) # create 1X2 column
