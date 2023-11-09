@@ -97,15 +97,15 @@ def single_team(code, team):
     team_corners_table.set_index("Round", inplace = True)
     return team_corners_table
 # %%
-if team != "":
-    team_corners = single_team(code, team)
-    mean_for = round(team_corners["Corners for"].mean(),2)
-    sd_for = round(team_corners["Corners for"].std(),2)
-    mean_against = round(team_corners["Corners against"].mean(),2)
-    sd_against = round(team_corners["Corners against"].std(),2)
-    st.dataframe(team_corners)
-    st.write(f"Average number of corners for {team}: {mean_for}, Standard deviation of corners for {team}: {sd_for}")
-    st.write(f"Average number of corners against {team}: {mean_against}, Standard deviation of corners against {team}: {sd_against}")
+# if team != "":
+#     team_corners = single_team(code, team)
+#     mean_for = round(team_corners["Corners for"].mean(),2)
+#     sd_for = round(team_corners["Corners for"].std(),2)
+#     mean_against = round(team_corners["Corners against"].mean(),2)
+#     sd_against = round(team_corners["Corners against"].std(),2)
+#     st.dataframe(team_corners)
+#     st.write(f"Average number of corners for {team}: {mean_for}, Standard deviation of corners for {team}: {sd_for}")
+#     st.write(f"Average number of corners against {team}: {mean_against}, Standard deviation of corners against {team}: {sd_against}")
 
 # 3
 st.markdown("### Corners average comparison and match prediction")
