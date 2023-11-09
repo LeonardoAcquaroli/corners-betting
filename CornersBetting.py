@@ -24,7 +24,7 @@ mws = import_MyWebScrapingTools().MyWsTools(chromedriver_executable_path=get_chr
 driver = mws.driver
 #%%
 ####### wait utility
-wait = WebDriverWait(driver, 50)
+wait = WebDriverWait(driver, 10000)
 # %%
 # @st.cache_resource(show_spinner=False)
 def get_aggregated_data(driver):
