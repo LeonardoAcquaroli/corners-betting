@@ -41,7 +41,7 @@ def init_driver(driver_headless=True, driver_loglevel3=True, driver_noImg=True):
 
 driver = init_driver()
 ####### wait utility
-wait = WebDriverWait(driver, 10)
+wait = WebDriverWait(driver, 15)
 # %%
 # @st.cache_resource(show_spinner=False)
 def get_aggregated_data(driver):
@@ -107,7 +107,6 @@ if team != "":
 
 def single_team(code, team, driver=driver):
     driver.get(f"https://fbref.com/en/squads/{code}/2023-2024/matchlogs/c11/passing_types/{team}-Match-Logs-Serie-A")
-    driver.current_url
     team_corners_table = pd.merge(corners_for(), corners_against(), left_index=True, right_index=True, suffixes=('', '_y'))
     team_corners_table = team_corners_table.loc[:, ~team_corners_table.columns.isin(["Date_y","Round_y","Venue_y","Result_y","GF_y","GA_y","Opponent_y"])]
     team_corners_table["Outcome"] = team_corners_table.apply(lambda row: 'Win' if row['Corners for'] > row['Corners against'] else ('Draw' if row['Corners for'] == row['Corners against'] else 'Defeat'), axis=1) # create 1X2 column
@@ -145,8 +144,10 @@ def t_test_predictions(teamA, teamB, alpha = 90.81):
         else:
             return ('X', p_value)
 
-# %%
+import time
 driver.get('https://fbref.com/en/comps/11/schedule/Serie-A-Scores-and-Fixtures')
+st.write(driver.current_url)
+time.sleep(5)
 fixtures_table = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="sched_2023-2024_11_1"]')))
 fixtures =  pd.read_html((fixtures_table.get_attribute('outerHTML')))[0]
 fixtures = fixtures[fixtures.Wk.isna() == False] # delete the grey blank rows to separate gameweeks
