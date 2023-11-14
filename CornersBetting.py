@@ -6,7 +6,6 @@ from selenium.webdriver.support import expected_conditions as EC
 import shutil
 # Web scraping proprietary library
 from import_MyWebScrapingTools import *
-import time
 # # Data
 import pandas as pd
 from t_test import *
@@ -20,7 +19,7 @@ import streamlit as st
 @st.cache_resource(show_spinner=False)
 def get_chromedriver_path():
     return shutil.which('chromedriver')
-mws = import_MyWebScrapingTools().MyWsTools(chromedriver_executable_path=get_chromedriver_path(), driver_headless=True, driver_loglevel3=True, driver_noImg=True)
+mws = import_MyWebScrapingTools().MyWsTools(chromedriver_executable_path=get_chromedriver_path(), driver_headless=True, driver_loglevel3=False, driver_noImg=True)
 driver = mws.driver
 #%%
 ####### wait utility
@@ -64,7 +63,6 @@ team_codes = pd.read_csv("https://raw.githubusercontent.com/LeonardoAcquaroli/co
 
 # %%
 def corners_for():
-    time.sleep(20)
     corners_for_team_table = wait.until(EC.presence_of_element_located((By.ID, 'matchlogs_for')))
     corners_for_team = pd.read_html((corners_for_team_table.get_attribute('outerHTML')))[0]
     columns = corners_for_team.columns.droplevel(0) # cut out the first header of the multi Index
@@ -115,7 +113,6 @@ def t_test_predictions(teamA, teamB, alpha = 90.81):
     if ((teamA != "") & (teamB != "")):
         codeA = team_codes.team_code[team_codes.team_name == teamA].reset_index(drop=True)[0]
         codeB = team_codes.team_code[team_codes.team_name == teamB].reset_index(drop=True)[0]
-        time.sleep(20)
         cornersA = single_team(code=codeA, team=teamA)['Corners difference']
         cornersB = single_team(code=codeB, team=teamB)['Corners difference']
         p_value = t_test().t_test(a=cornersA, b=cornersB)*100
@@ -151,3 +148,5 @@ reliabilities = [round( ((sign_level/2 - p) / sign_level/2)*100, 2 ) if p <= sig
 next_fixtures['Reliability of the forecast'] = reliabilities
 next_fixtures.set_index('Wk', inplace=True)
 st.dataframe(next_fixtures)
+# pred_file = next_fixtures.to_csv('SerieA_corners_predictions.csv')
+# st.download_button(label="Download the predictions", data=pred_file, file_name='SerieA_corners_predictions.csv')
