@@ -3,6 +3,8 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 import shutil
 # Web scraping proprietary library
 from import_MyWebScrapingTools import *
@@ -19,9 +21,25 @@ import streamlit as st
 @st.cache_resource(show_spinner=False)
 def get_chromedriver_path():
     return shutil.which('chromedriver')
-mws = import_MyWebScrapingTools().MyWsTools(chromedriver_executable_path=get_chromedriver_path(), driver_headless=True, driver_loglevel3=True, driver_noImg=True)
-driver = mws.driver
-#%%
+# mws = import_MyWebScrapingTools().MyWsTools(chromedriver_executable_path=get_chromedriver_path(), driver_headless=True, driver_loglevel3=True, driver_noImg=True)
+# driver = mws.driver
+
+def init_driver(driver_headless=True, driver_loglevel3=True, driver_noImg=True):
+    #### options
+    chrome_options = Options()
+    if driver_headless == True:
+        chrome_options.add_argument('--headless')
+    if driver_loglevel3 == True:
+        chrome_options.add_argument('log-level=3')
+    if driver_noImg == True:
+        chrome_options.add_argument('--blink-settings=imagesEnabled=false')
+    #### service
+    chrome_service = webdriver.ChromeService(executable_path=get_chromedriver_path())
+    #### webdriver
+    driver = webdriver.Chrome(options=chrome_options, service=chrome_service)
+    return driver
+
+driver = init_driver()
 ####### wait utility
 wait = WebDriverWait(driver, 10)
 # %%
@@ -92,6 +110,7 @@ if team != "":
 def single_team(code, team):
     # driver.get(f"https://fbref.com/en/squads/{code}/2023-2024/matchlogs/c11/passing_types/{team}-Match-Logs-Serie-A")
     driver.get(f"https://docs.streamlit.io/knowledge-base/tutorials/deploy/docker")
+    driver.current_url
     st.write(mws.element('/html/body/div/main/div/section/section[2]/article/div[2]/h2[1]/a', text = True))
     team_corners_table = pd.merge(corners_for(), corners_against(), left_index=True, right_index=True, suffixes=('', '_y'))
     team_corners_table = team_corners_table.loc[:, ~team_corners_table.columns.isin(["Date_y","Round_y","Venue_y","Result_y","GF_y","GA_y","Opponent_y"])]
