@@ -71,10 +71,8 @@ def get_aggregated_data(driver):
     corners_aggregated['Corners average difference'] = corners_aggregated['Corners for'] - corners_aggregated['Corners against']
     return corners_aggregated
 # 1
-st.write(driver)
 st.markdown("### Team-wise aggregated data")
 st.dataframe(get_aggregated_data(driver=driver))
-st.write(driver)
 
 # 2
 # Single teams tables
@@ -107,11 +105,9 @@ team = st.selectbox("Choose the team", pd.Series(team_codes['team_name']))
 if team != "":
     code = team_codes.team_code[team_codes.team_name == team].reset_index(drop=True)[0]
 
-def single_team(code, team):
-    # driver.get(f"https://fbref.com/en/squads/{code}/2023-2024/matchlogs/c11/passing_types/{team}-Match-Logs-Serie-A")
-    driver.get(f"https://docs.streamlit.io/knowledge-base/tutorials/deploy/docker")
+def single_team(code, team, driver=driver):
+    driver.get(f"https://fbref.com/en/squads/{code}/2023-2024/matchlogs/c11/passing_types/{team}-Match-Logs-Serie-A")
     driver.current_url
-    st.write(mws.element('/html/body/div/main/div/section/section[2]/article/div[2]/h2[1]/a', text = True))
     team_corners_table = pd.merge(corners_for(), corners_against(), left_index=True, right_index=True, suffixes=('', '_y'))
     team_corners_table = team_corners_table.loc[:, ~team_corners_table.columns.isin(["Date_y","Round_y","Venue_y","Result_y","GF_y","GA_y","Opponent_y"])]
     team_corners_table["Outcome"] = team_corners_table.apply(lambda row: 'Win' if row['Corners for'] > row['Corners against'] else ('Draw' if row['Corners for'] == row['Corners against'] else 'Defeat'), axis=1) # create 1X2 column
