@@ -8,7 +8,7 @@ class SingleTeamCorners():
         self.driver = driver
 
     def corners_for(self):
-        corners_for_team_table = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.ID, 'matchlogs_for')))
+        corners_for_team_table = WebDriverWait(self.driver, 20).until(EC.presence_of_element_located((By.ID, 'matchlogs_for')))
         corners_for_team = pd.read_html((corners_for_team_table.get_attribute('outerHTML')))[0]
         columns = corners_for_team.columns.droplevel(0) # cut out the first header of the multi Index
         corners_for_team.columns = columns
@@ -18,7 +18,7 @@ class SingleTeamCorners():
         return corners_for_team
 
     def corners_against(self):
-        corners_against_team_table = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.ID, 'matchlogs_against')))
+        corners_against_team_table = WebDriverWait(self.driver, 20).until(EC.presence_of_element_located((By.ID, 'matchlogs_against')))
         corners_against_team = pd.read_html((corners_against_team_table.get_attribute('outerHTML')))[0]
         columns = corners_against_team.columns.droplevel(0) # cut out the first header of the multi Index
         corners_against_team.columns = columns
