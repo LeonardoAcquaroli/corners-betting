@@ -1,4 +1,3 @@
-# %%
 # Web scraping libraries
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -46,7 +45,6 @@ st.dataframe(get_aggregated_data(driver=driver))
 
 # 2
 # Single teams tables
-# %%
 team_codes = pd.read_csv("https://raw.githubusercontent.com/LeonardoAcquaroli/corners-betting/main/team_codes/teams_23-24.csv")
 
 st.markdown("### Match-by-match data")
@@ -62,9 +60,8 @@ if team != "":
         try:
             team_corners = stc.single_team(code, team)
             break
-        except:
-            c += 1
-            st.write(c)
+        except Exception as error:
+            st.write(error)
     
     mean_for = round(team_corners["Corners for"].mean(),2)
     sd_for = round(team_corners["Corners for"].std(),2)
