@@ -59,8 +59,8 @@ if team != "":
         try:
             team_corners = stc.single_team(code, team)
             break
-        except Exception as error:
-            st.write(error)
+        except:
+            pass
     
     mean_for = round(team_corners["Corners for"].mean(),2)
     sd_for = round(team_corners["Corners for"].std(),2)
@@ -96,7 +96,7 @@ while True:
         fixtures_table = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="sched_2023-2024_11_1"]')))
         break
     except Exception as error:
-        st.write(error) 
+        st.write(error)
 
 fixtures =  pd.read_html((fixtures_table.get_attribute('outerHTML')))[0]
 fixtures = fixtures[fixtures.Wk.isna() == False] # delete the grey blank rows to separate gameweeks
