@@ -55,7 +55,6 @@ if team != "":
 stc = SingleTeamCorners(driver=driver)
 
 if team != "":
-    c = 0
     while True:
         try:
             team_corners = stc.single_team(code, team)
