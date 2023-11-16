@@ -57,7 +57,14 @@ if team != "":
 stc = SingleTeamCorners(driver=driver)
 
 if team != "":
-    team_corners = stc.single_team(code, team)
+    while True:
+        try:
+            team_corners = stc.single_team(code, team)
+            break
+        except:
+            pass
+
+    
     mean_for = round(team_corners["Corners for"].mean(),2)
     sd_for = round(team_corners["Corners for"].std(),2)
     mean_against = round(team_corners["Corners against"].mean(),2)
