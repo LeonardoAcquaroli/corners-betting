@@ -92,14 +92,12 @@ def t_test_predictions(teamA, teamB, alpha = 90.81):
 
 driver.get('https://fbref.com/en/comps/11/schedule/Serie-A-Scores-and-Fixtures')
 
-v = 0
 while True:
     try:
         fixtures_table = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="sched_2023-2024_11_1"]')))
         break
-    except:
-        v += 1
-        st.write(v) 
+    except Exception as error:
+        st.write(error) 
 
 
 
