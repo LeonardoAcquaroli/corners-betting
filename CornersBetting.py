@@ -57,13 +57,14 @@ if team != "":
 stc = SingleTeamCorners(driver=driver)
 
 if team != "":
+    c = 0
     while True:
         try:
             team_corners = stc.single_team(code, team)
             break
         except:
-            pass
-
+            c += 1
+            st.write(c)
     
     mean_for = round(team_corners["Corners for"].mean(),2)
     sd_for = round(team_corners["Corners for"].std(),2)
@@ -94,7 +95,18 @@ def t_test_predictions(teamA, teamB, alpha = 90.81):
             return ('X', p_value)
 
 driver.get('https://fbref.com/en/comps/11/schedule/Serie-A-Scores-and-Fixtures')
-fixtures_table = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="sched_2023-2024_11_1"]')))
+
+v = 0
+while True:
+    try:
+        fixtures_table = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="sched_2023-2024_11_1"]')))
+        break
+    except:
+        v += 1
+        st.write(v) 
+
+
+
 fixtures =  pd.read_html((fixtures_table.get_attribute('outerHTML')))[0]
 fixtures = fixtures[fixtures.Wk.isna() == False] # delete the grey blank rows to separate gameweeks
 fixtures = fixtures[fixtures.Score.isna()] # drop the played matches
