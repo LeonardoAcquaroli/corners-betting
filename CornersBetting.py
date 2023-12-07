@@ -22,6 +22,7 @@ import streamlit as st
 def get_chromedriver_path():
     return shutil.which('chromedriver')
 
+@st.cache_resource(show_spinner=False)
 def init_driver(driver_headless=True, driver_loglevel3=True, driver_noImg=True):
     #### options
     chrome_options = Options()
@@ -41,7 +42,7 @@ driver = init_driver()
 
 # 1
 st.markdown("### Team-wise aggregated data")
-st.dataframe(get_aggregated_data(driver=driver))
+st.dataframe(get_aggregated_data(_driver=driver))
 
 # 2
 # Single teams tables
@@ -74,6 +75,7 @@ if team != "":
 st.markdown("### Corners average comparison and match prediction")
 # Significance level based on the number of corners draws in Serie A 22/23: alpha = 90.81%
 
+@st.cache_data(show_spinner=False)
 def t_test_predictions(teamA, teamB, alpha = 90.81):
     if ((teamA != "") & (teamB != "")):
         codeA = team_codes.team_code[team_codes.team_name == teamA].reset_index(drop=True)[0]
@@ -120,5 +122,9 @@ reliabilities = [round( ((sign_level/2 - p) / sign_level/2)*100, 2 ) if p <= sig
 next_fixtures['Reliability of the forecast'] = reliabilities
 next_fixtures.set_index('Wk', inplace=True)
 st.dataframe(next_fixtures)
-# pred_file = next_fixtures.to_csv('SerieA_corners_predictions.csv')
-# st.download_button(label="Download the predictions", data=pred_file, file_name='SerieA_corners_predictions.csv')
+
+@st.cache_data(show_spinner=False)
+def convert_df(df):
+   return df.to_csv(index=False).encode('utf-8')
+csv = convert_df(next_fixtures)
+st.download_button("Press to Download", csv, "predictions.csv", "text/csv", key='download-csv')
