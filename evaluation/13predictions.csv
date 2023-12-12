@@ -1,11 +1,11 @@
-Wk;Day;Date;Time;Home;Away;Corners outcome;Reliability of the forecast;Correct_prediction
-13;Sat;25/11/2023;15:00;Salernitana;Lazio;2;20.22;1
-13;Sat;25/11/2023;18:00;Atalanta;Napoli;2;14.61;0
-13;Sat;25/11/2023;20:45;Milan;Fiorentina;X;4.06;0
-13;Sun;26/11/2023;12:30;Cagliari;Monza;2;24.22;1
-13;Sun;26/11/2023;15:00;Frosinone;Genoa;1;12.36;1
-13;Sun;26/11/2023;15:00;Empoli;Sassuolo;2;18.13;0
-13;Sun;26/11/2023;18:00;Roma;Udinese;1;10.83;1
-13;Sun;26/11/2023;20:45;Juventus;Inter;2;17.29;0
-13;Mon;27/11/2023;18:30;Hellas Verona;Lecce;2;19.61;0
-13;Mon;27/11/2023;20:45;Bologna;Torino;2;22.79;0
+Wk;Day;Date;Time;Home;Away;Corners outcome;Reliability of the forecast
+13;Sat;25/11/2023;15:00;Salernitana;Lazio;2;20.22
+13;Sat;25/11/2023;18:00;Atalanta;Napoli;2;14.61
+13;Sat;25/11/2023;20:45;Milan;Fiorentina;X;4.06
+13;Sun;26/11/2023;12:30;Cagliari;Monza;2;24.22
+13;Sun;26/11/2023;15:00;Frosinone;Genoa;1;12.36
+13;Sun;26/11/2023;15:00;Empoli;Sassuolo;2;18.13
+13;Sun;26/11/2023;18:00;Roma;Udinese;1;10.83
+13;Sun;26/11/2023;20:45;Juventus;Inter;2;17.29
+13;Mon;27/11/2023;18:30;Hellas Verona;Lecce;2;19.61
+13;Mon;27/11/2023;20:45;Bologna;Torino;2;22.79
