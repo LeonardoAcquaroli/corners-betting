@@ -107,15 +107,15 @@ fixtures = fixtures[fixtures.Score.isna()] # drop the played matches
 fixtures = fixtures.reset_index(drop=True) # reset index
 next_fixtures = fixtures[["Wk","Day","Date","Time","Home","Away"]][fixtures.Wk == fixtures.Wk[0]].reset_index(drop=True)
 corners_outcome = next_fixtures.apply(lambda row: t_test_predictions(teamA = row['Home'], teamB = row['Away']), axis=1) # return winning team name and p_value
-next_fixtures['Corners outcome'] = [outcome[0] for outcome in corners_outcome] # Team name
+next_fixtures['Corners predictions'] = [outcome[0] for outcome in corners_outcome] # Team name
 p_values = [outcome[1] for outcome in corners_outcome] # p values
 
 # Transform into 1X2 with np.where
 conditions = [
-    (next_fixtures['Corners outcome'] == 'X'),
-    (next_fixtures['Corners outcome'] == next_fixtures['Home']),
-    (next_fixtures['Corners outcome'] == next_fixtures['Away'])]
-next_fixtures['Corners outcome'] = np.where(conditions[0], 'X', np.where(conditions[1], '1', '2'))
+    (next_fixtures['Corners predictions'] == 'X'),
+    (next_fixtures['Corners predictions'] == next_fixtures['Home']),
+    (next_fixtures['Corners predictions'] == next_fixtures['Away'])]
+next_fixtures['Corners predictions'] = np.where(conditions[0], 'X', np.where(conditions[1], '1', '2'))
 
 # Add forecast reliability calculated as the difference between the significance threshold (45.405 or 50) and the p_value for each game
 sign_level = 90.81
