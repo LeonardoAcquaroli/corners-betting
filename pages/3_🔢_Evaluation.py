@@ -138,21 +138,23 @@ evaluation["Succesful bet"] = successful_bets
 st.dataframe(evaluation)
 
 
-def evaluate_predictions(evaluation_df, thr = 20):
+def evaluate_predictions(evaluation_df, thr = 20, printout=False):
     filtered_data = evaluation_df[evaluation_df['Reliability of the forecast'] >= thr]
     correct_pred = filtered_data["Succesful bet"].sum()
     all_pred = len(filtered_data)
     perc_correct = round((correct_pred)/all_pred*100,2)
-    # st.write(f"{correct_pred}/{all_pred} ({perc_correct}%) correctly predicted games with reliability greater than {thr}%.")
+    if printout:
+        st.write(f"{correct_pred}/{all_pred} ({perc_correct}%) correctly predicted games with reliability greater than {thr}%.")
     return (correct_pred, perc_correct)
 
-thr = st.number_input("Reliability threshold", min_value=0, max_value=100, value=20, help="Select a threshold for the reliability of the prediction")
+# Print the accuracy based on the chosen level of reliability
+thr_chosen = st.number_input("Reliability threshold", min_value=0, max_value=100, value=20, help="Select a threshold for the reliability of the prediction")
+evaluate_predictions(evaluation_df=evaluation, thr=thr_chosen, printout=True)
+
 perc_list = []
 for threshold in range(math.ceil((evaluation['Reliability of the forecast'].max()))):
     perc = evaluate_predictions(evaluation_df=evaluation, thr=threshold)[1]
     perc_list.append(perc)
-
-# plt.plot(perc_list);
 
 # Create a trace for the line plot
 trace = go.Scatter(x=list(range(math.ceil((evaluation['Reliability of the forecast'].max())))), y=perc_list, mode='lines', name='Line Plot')
