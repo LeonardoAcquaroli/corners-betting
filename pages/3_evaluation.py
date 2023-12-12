@@ -157,4 +157,4 @@ trace = go.Scatter(x=list(range(math.ceil((evaluation['Reliability of the foreca
 layout = go.Layout(title='Percentual of succesful bets for different thresholds', xaxis=dict(title='Reliability threshold'), yaxis=dict(title='Percentual of succesful bets'))
 # Create a figure and add the trace to it
 fig = go.Figure(data=[trace], layout=layout)
-fig.show()
+st.write(fig.show())
