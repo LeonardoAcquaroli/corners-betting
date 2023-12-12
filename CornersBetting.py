@@ -92,6 +92,7 @@ def t_test_predictions(teamA, teamB, alpha = 90.81):
         else:
             return ('X', p_value)
 
+# Try multiple times (because it does not work in deployment)
 while True:
     try:
         driver.get('https://fbref.com/en/comps/11/schedule/Serie-A-Scores-and-Fixtures')
