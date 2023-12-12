@@ -87,6 +87,7 @@ team_codes = pd.read_csv("https://raw.githubusercontent.com/LeonardoAcquaroli/co
 # Initialize stc
 stc = SingleTeamCorners(driver=driver)
 
+@st.cache_resource(show_spinner=False)
 def corners_result(game_data):
     homeTeam = game_data["Home"]
     awayTeam = game_data["Away"]
