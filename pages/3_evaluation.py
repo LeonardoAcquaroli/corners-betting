@@ -154,7 +154,7 @@ for threshold in range(math.ceil((evaluation['Reliability of the forecast'].max(
 # Create a trace for the line plot
 trace = go.Scatter(x=list(range(math.ceil((evaluation['Reliability of the forecast'].max())))), y=perc_list, mode='lines', name='Line Plot')
 # Create a layout for the plot
-layout = go.Layout(title='Interactive Line Plot', xaxis=dict(title='X-axis'), yaxis=dict(title='Y-axis'))
+layout = go.Layout(title='Percentual of succesful bets for different thresholds', xaxis=dict(title='Reliability threshold'), yaxis=dict(title='Percentual of succesful bets'))
 # Create a figure and add the trace to it
 fig = go.Figure(data=[trace], layout=layout)
 fig.show()
