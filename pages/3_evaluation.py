@@ -135,6 +135,8 @@ evaluation["Corners predictions"] = evaluation["Corners predictions"].astype('st
 successful_bets = evaluation.apply(lambda game: [1 if game["Corners outcome"] == game["Corners predictions"] else 0], axis=1) # is a nested list
 successful_bets = [item for sublist in successful_bets for item in sublist]
 evaluation["Succesful bet"] = successful_bets
+st.dataframe(evaluation)
+
 
 def evaluate_predictions(evaluation_df, thr = 20):
     filtered_data = evaluation_df[evaluation_df['Reliability of the forecast'] >= thr]
