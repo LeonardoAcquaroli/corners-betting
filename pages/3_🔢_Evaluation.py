@@ -14,7 +14,6 @@ import math
 # Web app
 import streamlit as st
 # Plot
-import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 
 # Recreate the SingleTeam class
