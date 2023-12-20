@@ -126,9 +126,9 @@ if response.status_code == 200:
         # Read the CSV content into a DataFrame
         content = requests.get(raw_url).text
         try:
-            df = pd.read_csv(StringIO(content), sep=',')
-        except:
             df = pd.read_csv(StringIO(content), sep=';')
+        except:
+            df = pd.read_csv(StringIO(content), sep=',')
         concatenated_data = pd.concat((concatenated_data, df), ignore_index=True)
 concatenated_data.drop(["Day","Date","Time"], inplace=True, axis=1)
 
