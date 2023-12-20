@@ -81,7 +81,10 @@ fixtures = fixtures[(fixtures.Wk.isna() == False) & (fixtures.Wk != "Wk") & (fix
 fixtures = fixtures[["Wk","Home","Away"]]
 
 # Get teams code
-team_codes = pd.read_csv("https://raw.githubusercontent.com/LeonardoAcquaroli/corners-betting/main/team_codes/teams_23-24.csv")
+try:
+    team_codes = pd.read_csv("https://raw.githubusercontent.com/LeonardoAcquaroli/corners-betting/main/team_codes/teams_23-24.csv", sep=',')
+except:
+    team_codes = pd.read_csv("https://raw.githubusercontent.com/LeonardoAcquaroli/corners-betting/main/team_codes/teams_23-24.csv", sep=';')
 
 # Initialize stc
 stc = SingleTeamCorners(driver=driver)
@@ -122,7 +125,10 @@ if response.status_code == 200:
         raw_url = files[csv_files.index(csv_file)]["download_url"]
         # Read the CSV content into a DataFrame
         content = requests.get(raw_url).text
-        df = pd.read_csv(StringIO(content), sep=";")
+        try:
+            df = pd.read_csv(StringIO(content), sep=',')
+        except:
+            df = pd.read_csv(StringIO(content), sep=';')
         concatenated_data = pd.concat((concatenated_data, df), ignore_index=True)
 concatenated_data.drop(["Day","Date","Time"], inplace=True, axis=1)
 
