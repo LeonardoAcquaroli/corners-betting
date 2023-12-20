@@ -125,10 +125,10 @@ if response.status_code == 200:
         raw_url = files[csv_files.index(csv_file)]["download_url"]
         # Read the CSV content into a DataFrame
         content = requests.get(raw_url).text
-        try:
-            df = pd.read_csv(StringIO(content), sep=';')
-        except:
+        if len(df.columns) == 2: # Because if the csv is separated by ',' it does not split it in a 7 columns df
             df = pd.read_csv(StringIO(content), sep=',')
+        else:
+            df = pd.read_csv(StringIO(content), sep=';')
         concatenated_data = pd.concat((concatenated_data, df), ignore_index=True)
 concatenated_data.drop(["Day","Date","Time"], inplace=True, axis=1)
 
