@@ -9,6 +9,7 @@ from get_aggregated_data import *
 from SingleTeam import SingleTeamCorners
 # Data
 import pandas as pd
+import numpy as np
 from t_test import *
 # Web app
 import streamlit as st
