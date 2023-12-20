@@ -1,11 +1,11 @@
-Day,Date,Time,Home,Away,Corners predictions,Reliability of the forecast
-Fri,2023-12-22,18:30,Sassuolo,Genoa,1,16.08
-Fri,2023-12-22,18:30,Empoli,Lazio,2,19.93
-Fri,2023-12-22,20:45,Monza,Fiorentina,2,1.97
-Fri,2023-12-22,20:45,Salernitana,Milan,2,21.18
-Sat,2023-12-23,12:30,Frosinone,Juventus,2,11.64
-Sat,2023-12-23,15:00,Torino,Udinese,1,23.5
-Sat,2023-12-23,15:00,Bologna,Atalanta,2,24.99
-Sat,2023-12-23,18:00,Inter,Lecce,1,22.45
-Sat,2023-12-23,18:00,Hellas Verona,Cagliari,2,3.2
-Sat,2023-12-23,20:45,Roma,Napoli,2,8.78
+Wk;Day;Date;Time;Home;Away;Corners predictions;Reliability of the forecast
+17;Fri;22/12/2023;18:30;Sassuolo;Genoa;1;16.08
+17;Fri;22/12/2023;18:30;Empoli;Lazio;2;19.93
+17;Fri;22/12/2023;20:45;Monza;Fiorentina;2;1.97
+17;Fri;22/12/2023;20:45;Salernitana;Milan;2;21.18
+17;Sat;23/12/2023;12:30;Frosinone;Juventus;2;11.64
+17;Sat;23/12/2023;15:00;Torino;Udinese;1;23.5
+17;Sat;23/12/2023;15:00;Bologna;Atalanta;2;24.99
+17;Sat;23/12/2023;18:00;Inter;Lecce;1;22.45
+17;Sat;23/12/2023;18:00;Hellas Verona;Cagliari;2;3.2
+17;Sat;23/12/2023;20:45;Roma;Napoli;2;8.78
