@@ -39,6 +39,10 @@ def init_driver(driver_headless=True, driver_loglevel3=True, driver_noImg=True):
     driver = webdriver.Chrome(options=chrome_options, service=chrome_service)
     return driver
 
+@st.cache_data(show_spinner=False)
+def convert_df2csv(df):
+   return df.to_csv(index=False).encode('utf-8')
+
 driver = init_driver()
 
 # 1
@@ -122,11 +126,7 @@ next_fixtures['Corners predictions'] = np.where(conditions[0], 'X', np.where(con
 sign_level = 90.81
 reliabilities = [round( ((sign_level/2 - p) / sign_level/2)*100, 2 ) if p <= sign_level/2 else round( ((50 - p) / 50)*100, 2 ) for p in p_values]
 next_fixtures['Reliability of the forecast'] = reliabilities
+csv = convert_df2csv(next_fixtures)
 next_fixtures.set_index('Wk', inplace=True)
 st.dataframe(next_fixtures)
-
-@st.cache_data(show_spinner=False)
-def convert_df(df):
-   return df.to_csv(index=False).encode('utf-8')
-csv = convert_df(next_fixtures)
 st.download_button("Press to Download", csv, "predictions.csv", "text/csv", key='download-csv')
