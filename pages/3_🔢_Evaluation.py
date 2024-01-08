@@ -23,7 +23,7 @@ class SingleTeamCorners():
 
     def corners_for(self):
         corners_for_team_table = WebDriverWait(self.driver, 20).until(EC.presence_of_element_located((By.ID, 'matchlogs_for')))
-        corners_for_team = pd.read_html((corners_for_team_table.get_attribute('outerHTML')))[0]
+        corners_for_team = pd.read_html(StringIO(corners_for_team_table.get_attribute('outerHTML')))[0]
         columns = corners_for_team.columns.droplevel(0) # cut out the first header of the multi Index
         corners_for_team.columns = columns
         corners_for_team = corners_for_team[["Date","Round","Venue","Result","GF","GA","Opponent","CK"]] # select only the important columns
@@ -33,7 +33,7 @@ class SingleTeamCorners():
 
     def corners_against(self):
         corners_against_team_table = WebDriverWait(self.driver, 20).until(EC.presence_of_element_located((By.ID, 'matchlogs_against')))
-        corners_against_team = pd.read_html((corners_against_team_table.get_attribute('outerHTML')))[0]
+        corners_against_team = pd.read_html(StringIO(corners_against_team_table.get_attribute('outerHTML')))[0]
         columns = corners_against_team.columns.droplevel(0) # cut out the first header of the multi Index
         corners_against_team.columns = columns
         corners_against_team = corners_against_team[["Date","Round","Venue","Result","GF","GA","Opponent","CK"]] # select only the important columns
@@ -76,15 +76,12 @@ driver = init_driver()
 # Get fixtures
 driver.get('https://fbref.com/en/comps/11/schedule/Serie-A-Scores-and-Fixtures')
 fixtures_table = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="sched_2023-2024_11_1"]')))
-fixtures =  pd.read_html((fixtures_table.get_attribute('outerHTML')))[0]
+fixtures =  pd.read_html(StringIO(fixtures_table.get_attribute('outerHTML')))[0]
 fixtures = fixtures[(fixtures.Wk.isna() == False) & (fixtures.Wk != "Wk") & (fixtures.Score.isna() == False)] # delete grey blank rows, repeated headers and taken only played games
 fixtures = fixtures[["Wk","Home","Away"]]
 
 # Get teams code
-try:
-    team_codes = pd.read_csv("https://raw.githubusercontent.com/LeonardoAcquaroli/corners-betting/main/team_codes/teams_23-24.csv", sep=',')
-except:
-    team_codes = pd.read_csv("https://raw.githubusercontent.com/LeonardoAcquaroli/corners-betting/main/team_codes/teams_23-24.csv", sep=';')
+team_codes = pd.read_csv("https://raw.githubusercontent.com/LeonardoAcquaroli/corners-betting/main/team_codes/teams_23-24.csv")
 
 # Initialize stc
 stc = SingleTeamCorners(driver=driver)
