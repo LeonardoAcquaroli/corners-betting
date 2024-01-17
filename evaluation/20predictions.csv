@@ -1,11 +1,11 @@
-Wk,Day,Date,Time,Home,Away,Corners predictions,Reliability of the forecast
-20,Sat,2024-01-13,15:00,Napoli,Salernitana,1,24.99
-20,Sat,2024-01-13,15:00,Genoa,Torino,2,23.2
-20,Sat,2024-01-13,18:00,Hellas Verona,Empoli,2,7.25
-20,Sat,2024-01-13,20:45,Monza,Inter,2,21.33
-20,Sun,2024-01-14,12:30,Lazio,Lecce,1,20.59
-20,Sun,2024-01-14,15:00,Cagliari,Bologna,2,10.15
-20,Sun,2024-01-14,18:00,Fiorentina,Udinese,1,24.32
-20,Sun,2024-01-14,20:45,Milan,Roma,2,17.03
-20,Mon,2024-01-15,20:45,Atalanta,Frosinone,1,24.44
-20,Tue,2024-01-16,20:45,Juventus,Sassuolo,1,6.56
+Wk;Day;Date;Time;Home;Away;Corners predictions;Reliability of the forecast
+20;Sat;13/01/2024;15:00;Napoli;Salernitana;1;24.99
+20;Sat;13/01/2024;15:00;Genoa;Torino;2;23.2
+20;Sat;13/01/2024;18:00;Hellas Verona;Empoli;2;7.25
+20;Sat;13/01/2024;20:45;Monza;Inter;2;21.33
+20;Sun;14/01/2024;12:30;Lazio;Lecce;1;20.59
+20;Sun;14/01/2024;15:00;Cagliari;Bologna;2;10.15
+20;Sun;14/01/2024;18:00;Fiorentina;Udinese;1;24.32
+20;Sun;14/01/2024;20:45;Milan;Roma;2;17.03
+20;Mon;15/01/2024;20:45;Atalanta;Frosinone;1;24.44
+20;Tue;16/01/2024;20:45;Juventus;Sassuolo;1;6.56
