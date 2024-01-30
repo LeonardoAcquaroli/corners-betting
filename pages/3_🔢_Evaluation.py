@@ -11,6 +11,7 @@ import numpy as np
 import requests
 from io import StringIO
 import math
+import re
 # Web app
 import streamlit as st
 # Plot
@@ -88,21 +89,37 @@ stc = SingleTeamCorners(driver=driver)
 
 @st.cache_resource(show_spinner=False)
 def corners_result(game_data):
+    Wk = int(game_data['Wk'])
     homeTeam = game_data["Home"]
     awayTeam = game_data["Away"]
     homeCode = team_codes.team_code[team_codes.team_name == homeTeam].reset_index(drop=True)[0]
-    # awayCode = team_codes.team_code[team_codes.team_name == awayTeam]
     driver.get(f"https://fbref.com/en/squads/{homeCode}/2023-2024/matchlogs/c11/passing_types/{homeTeam}-Match-Logs-Serie-A")
     cornersHome = stc.corners_for()
-    cornersHome = cornersHome["Corners for"][cornersHome["Opponent"] == awayTeam]
     cornersAway = stc.corners_against()
-    cornersAway = cornersAway["Corners against"][cornersAway["Opponent"] == awayTeam]
+    # Code block to face double matches after season halfway
+    cornersHome_len = len(cornersHome["Corners for"][cornersHome["Opponent"] == awayTeam]) # Get all the matches against awayTeam
+    if cornersHome_len > 1 and Wk < 19: # If they played twice (more than once) and game_data refers to a match of the first leg
+        cornersHome = pd.Series(cornersHome["Corners for"][cornersHome["Opponent"] == awayTeam].iloc[0], name="Corners for") # Get the first leg cornersHome
+    elif cornersHome_len > 1 and Wk > 19:
+        cornersHome = pd.Series(cornersHome["Corners for"][cornersHome["Opponent"] == awayTeam].iloc[1], name="Corners for") # Get the second leg cornersHome
+    elif cornersHome_len == 1:
+        cornersHome = cornersHome["Corners for"][cornersHome["Opponent"] == awayTeam] # Get the only leg cornersHome present
+    
+    cornersAway_len = len(cornersAway["Corners against"][cornersAway["Opponent"] == awayTeam]) # Get all the matches against awayTeam
+    if cornersAway_len > 1 and Wk < 19: # If they played twice (more than once) and game_data refers to a match of the first leg
+        cornersAway = pd.Series(cornersAway["Corners against"][cornersAway["Opponent"] == awayTeam].iloc[0], name="Corners against") # Get the first leg cornersHome
+    elif cornersAway_len > 1 and Wk > 19:
+        cornersAway = pd.Series(cornersAway["Corners against"][cornersAway["Opponent"] == awayTeam].iloc[1], name="Corners against") # Get the second leg cornersHome
+    elif cornersAway_len == 1:
+        cornersAway = cornersAway["Corners against"][cornersAway["Opponent"] == awayTeam] # Get the only leg cornersHome present
+        
     return pd.concat((cornersHome, cornersAway), axis=1)
 
 corners_homeAway = fixtures.apply(lambda game_data: corners_result(game_data), axis=1)
 fixtures[["Corners home", "Corners away"]] = pd.concat(corners_homeAway.tolist(), ignore_index=True).values
 fixtures["Corners outcome"] = np.where(fixtures['Corners home'] > fixtures['Corners away'], '1', 
-                                 np.where(fixtures['Corners home'] < fixtures['Corners away'], '2', 'X'))
+                                 np.where(fixtures['Corners home'] < fixtures['Corners away'], '2', 
+                                          'X'))
 fixtures.Wk = fixtures.Wk.astype(int)
 # Get only the matches after the 12th Gameweek
 fixtures_evaluated = fixtures[fixtures.Wk >= 12]
