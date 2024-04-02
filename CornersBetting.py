@@ -110,7 +110,8 @@ fixtures =  pd.read_html((fixtures_table.get_attribute('outerHTML')))[0]
 fixtures = fixtures[fixtures.Wk.isna() == False] # delete the grey blank rows to separate gameweeks
 fixtures = fixtures[fixtures.Score.isna()] # drop the played matches
 fixtures = fixtures.reset_index(drop=True) # reset index
-next_fixtures = fixtures[["Wk","Day","Date","Time","Home","Away"]][fixtures.Wk <= fixtures.Wk[0]].reset_index(drop=True)
+current_Wk = fixtures.Wk[:10].mode()[0]
+next_fixtures = fixtures[["Wk","Day","Date","Time","Home","Away"]][fixtures.Wk <= current_Wk].reset_index(drop=True)
 corners_outcome = next_fixtures.apply(lambda row: t_test_predictions(teamA = row['Home'], teamB = row['Away']), axis=1) # return winning team name and p_value
 next_fixtures['Corners predictions'] = [outcome[0] for outcome in corners_outcome] # Team name
 p_values = [outcome[1] for outcome in corners_outcome] # p values
