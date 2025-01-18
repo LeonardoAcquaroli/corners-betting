@@ -51,7 +51,7 @@ st.dataframe(get_aggregated_data(_driver=driver))
 
 # 2
 # Single teams tables
-team_codes = pd.read_csv("https://raw.githubusercontent.com/LeonardoAcquaroli/corners-betting/main/team_codes/teams_23-24.csv")
+team_codes = pd.read_csv("https://raw.githubusercontent.com/LeonardoAcquaroli/corners-betting/main/team_codes/teams_24-25.csv")
 
 st.markdown("### Match-by-match data")
 team = st.selectbox("Choose the team", pd.Series(team_codes['team_name']))
@@ -101,7 +101,7 @@ def t_test_predictions(teamA, teamB, alpha = 90.81):
 while True:
     try:
         driver.get('https://fbref.com/en/comps/11/schedule/Serie-A-Scores-and-Fixtures')
-        fixtures_table = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="sched_2023-2024_11_1"]')))
+        fixtures_table = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, f'//*[@id="sched_{stc.season}-{stc.season+1}_11_1"]')))
         break
     except Exception as error:
         st.write(error)

@@ -3,8 +3,8 @@ import scipy.stats
 
 class t_test():
     def __init__(self) -> None:
-        self
-
+        pass
+    
     def F_test(self, a, b):
         '''
         F test is used to compare the variances of two independent samples.
