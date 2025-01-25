@@ -22,7 +22,7 @@ class WebDriverUtility:
 
     @staticmethod
     @st.cache_resource(show_spinner=False)
-    def init_driver(headless=True, log_level=0, no_images=True):
+    def init_driver(headless=True, log_level=3, no_images=True):
         #### options
         chrome_options = Options()
         if headless:
