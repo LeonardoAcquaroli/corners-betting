@@ -6,49 +6,24 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import shutil
 import time
-from get_aggregated_data import *
-from SingleTeam import SingleTeamCorners
+# from get_aggregated_data import *
+# from SingleTeam import SingleTeamCorners
 # Data
 import pandas as pd
-import numpy as np
-from t_test import *
+import numpy as npr
+from utilities.utilities import *
 # Web app
 import streamlit as st
 # Strings handling
-#from io import StringIO
+from io import StringIO
 
 # -----------------------------------
-
-# Driver initialization
-@st.cache_resource(show_spinner=False)
-def get_chromedriver_path():
-    return shutil.which('chromedriver')
-
-@st.cache_resource(show_spinner=False)
-def init_driver(driver_headless=True, driver_loglevel3=True, driver_noImg=True):
-    #### options
-    chrome_options = Options()
-    if driver_headless == True:
-        chrome_options.add_argument('--headless')
-    if driver_loglevel3 == True:
-        chrome_options.add_argument('log-level=3')
-    if driver_noImg == True:
-        chrome_options.add_argument('--blink-settings=imagesEnabled=false')
-    #### service
-    chrome_service = webdriver.ChromeService(executable_path=get_chromedriver_path())
-    #### webdriver
-    driver = webdriver.Chrome(options=chrome_options, service=chrome_service)
-    return driver
-
-@st.cache_data(show_spinner=False)
-def convert_df2csv(df):
-   return df.to_csv(index=False).encode('utf-8')
-
-driver = init_driver()
+driver = WebDriverUtility.init_driver()
 
 # 1
 st.markdown("### Team-wise aggregated data")
-st.dataframe(get_aggregated_data(_driver=driver))
+preprocessing_utility = PreprocessingUtility()
+st.dataframe(preprocessing_utility.get_aggregated_data(_driver=driver))
 
 # 2
 # Single teams tables
@@ -59,7 +34,7 @@ team = st.selectbox("Choose the team", pd.Series(team_codes['team_name']))
 if team != "":
     code = team_codes.team_code[team_codes.team_name == team].reset_index(drop=True)[0]
 
-stc = SingleTeamCorners(driver=driver)
+stc = SingleTeamCornersUtility(driver=driver)
 
 if team != "":
     while True:
@@ -90,7 +65,7 @@ def t_test_predictions(teamA, teamB, alpha = 90.81):
         cornersA = stc.single_team(code=codeA, team=teamA)['Corners difference']
         time.sleep(1)
         cornersB = stc.single_team(code=codeB, team=teamB)['Corners difference']
-        p_value = t_test().t_test(a=cornersA, b=cornersB)*100
+        p_value = TTestUtility(alpha=0.05).t_test(sample1=cornersA, sample2=cornersB)*100
         if p_value <= (alpha/2): # Reject hypotesis of equality in corners average. Righ/Left most tail of the t distribution
             if np.mean(cornersA) >= np.mean(cornersB):
                 corners_winning_team = teamA
@@ -130,7 +105,5 @@ next_fixtures['Corners predictions'] = np.where(conditions[0], 'X', np.where(con
 sign_level = 90.81
 reliabilities = [round( ((sign_level/2 - p) / sign_level/2)*100, 2 ) if p <= sign_level/2 else round( ((50 - p) / 50)*100, 2 ) for p in p_values]
 next_fixtures['Reliability of the forecast'] = reliabilities
-csv = convert_df2csv(next_fixtures)
 next_fixtures.set_index('Wk', inplace=True)
 st.dataframe(next_fixtures)
-st.download_button("Press to Download", csv, "predictions.csv", "text/csv", key='download-csv')
