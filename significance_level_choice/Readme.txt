@@ -1,1 +1,0 @@
-The significance level is choosen as 100% minus the fraction of games that ended with a draw in corners number in 22-23 Serie A.
