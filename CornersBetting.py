@@ -2,15 +2,10 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-import shutil
 import time
-# from get_aggregated_data import *
-# from SingleTeam import SingleTeamCorners
 # Data
 import pandas as pd
-import numpy as npr
+import numpy as np
 from utilities.utilities import *
 # Web app
 import streamlit as st
