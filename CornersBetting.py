@@ -5,6 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import shutil
+import time
 from get_aggregated_data import *
 from SingleTeam import SingleTeamCorners
 # Data
@@ -85,7 +86,9 @@ def t_test_predictions(teamA, teamB, alpha = 90.81):
     if ((teamA != "") & (teamB != "")):
         codeA = team_codes.team_code[team_codes.team_name == teamA].reset_index(drop=True)[0]
         codeB = team_codes.team_code[team_codes.team_name == teamB].reset_index(drop=True)[0]
+        time.sleep(1)
         cornersA = stc.single_team(code=codeA, team=teamA)['Corners difference']
+        time.sleep(1)
         cornersB = stc.single_team(code=codeB, team=teamB)['Corners difference']
         p_value = t_test().t_test(a=cornersA, b=cornersB)*100
         if p_value <= (alpha/2): # Reject hypotesis of equality in corners average. Righ/Left most tail of the t distribution
