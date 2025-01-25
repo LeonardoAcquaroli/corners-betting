@@ -44,7 +44,6 @@ class WebDriverUtility:
 class SingleTeamCornersUtility():
     def __init__(self, driver):
         self.driver = driver
-        self.season = date.today().year if (7 <= date.today().month <= 12) else date.today().year - 1
 
     def corners_for(self):
         corners_for_team_table = WebDriverWait(self.driver, 20).until(EC.presence_of_element_located((By.ID, 'matchlogs_for')))
@@ -75,8 +74,14 @@ class SingleTeamCornersUtility():
         corners_against_team = corners_against_team.reset_index(drop=True)
         return corners_against_team
 
-    def single_team(self, code, team):
-        self.driver.get(f"https://fbref.com/en/squads/{code}/{self.season}-{self.season+1}/matchlogs/c11/passing_types/{team}-Match-Logs-Serie-A")
+    def single_team(self, code, team, season):
+        '''
+        Parameters:
+            code (str): The team's unique identifier code used in fbref.com URLs
+            team (str): The team's name
+            season (int): The starting year of the season (e.g., 2023 for 2023-24 season)
+        '''
+        self.driver.get(f"https://fbref.com/en/squads/{code}/{season}-{season+1}/matchlogs/c11/passing_types/{team}-Match-Logs-Serie-A")
         team_corners_table = pd.merge(self.corners_for(), self.corners_against(), left_index=True, right_index=True, suffixes=('', '_y'))
         team_corners_table = team_corners_table.loc[:, ~team_corners_table.columns.isin(["Date_y","Round_y","Venue_y","Result_y","GF_y","GA_y","Opponent_y"])]
         team_corners_table["Outcome"] = team_corners_table.apply(lambda row: 'Win' if int(row['Corners for']) > int(row['Corners against']) else ('Draw' if int(row['Corners for']) == int(row['Corners against']) else 'Defeat'), axis=1) # create 1X2 column
