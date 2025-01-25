@@ -84,7 +84,7 @@ while True:
     except Exception as error:
         st.write(error)
 
-fixtures =  pd.read_html((fixtures_table.get_attribute('outerHTML')))[0]
+fixtures = pd.read_html(StringIO(fixtures_table.get_attribute('outerHTML')))[0]
 fixtures = fixtures[fixtures.Wk.isna() == False] # delete the grey blank rows to separate gameweeks
 fixtures = fixtures[fixtures.Score.isna()] # drop the played matches
 fixtures = fixtures.reset_index(drop=True) # reset index

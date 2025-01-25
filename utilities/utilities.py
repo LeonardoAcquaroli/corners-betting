@@ -12,6 +12,7 @@ import shutil
 import pandas as pd
 from datetime import date
 import streamlit as st
+from io import StringIO
 
 class WebDriverUtility:
     @staticmethod
@@ -47,7 +48,7 @@ class SingleTeamCornersUtility():
 
     def corners_for(self):
         corners_for_team_table = WebDriverWait(self.driver, 20).until(EC.presence_of_element_located((By.ID, 'matchlogs_for')))
-        corners_for_team = pd.read_html((corners_for_team_table.get_attribute('outerHTML')))[0]
+        corners_for_team = pd.read_html(StringIO(corners_for_team_table.get_attribute('outerHTML')))[0]
         columns = corners_for_team.columns.droplevel(0) # cut out the first header of the multi Index
         corners_for_team.columns = columns
         corners_for_team = corners_for_team[["Date","Round","Venue","Result","GF","GA","Opponent","CK"]] # select only the important columns
@@ -63,7 +64,7 @@ class SingleTeamCornersUtility():
 
     def corners_against(self):
         corners_against_team_table = WebDriverWait(self.driver, 20).until(EC.presence_of_element_located((By.ID, 'matchlogs_against')))
-        corners_against_team = pd.read_html((corners_against_team_table.get_attribute('outerHTML')))[0]
+        corners_against_team = pd.read_html(StringIO(corners_against_team_table.get_attribute('outerHTML')))[0]
         columns = corners_against_team.columns.droplevel(0) # cut out the first header of the multi Index
         corners_against_team.columns = columns
         corners_against_team = corners_against_team[["Date","Round","Venue","Result","GF","GA","Opponent","CK"]] # select only the important columns
@@ -102,8 +103,8 @@ class PreprocessingUtility:
         table_for = WebDriverWait(_driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="stats_squads_passing_types_for"]')))
         table_against = WebDriverWait(_driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="stats_squads_passing_types_against"]')))
         # Parse the HTML table using Pandas
-        corners_for_aggregated = pd.read_html((table_for.get_attribute('outerHTML')))[0]
-        corners_against_aggregated = pd.read_html((table_against.get_attribute('outerHTML')))[0]
+        corners_for_aggregated = pd.read_html(StringIO(table_for.get_attribute('outerHTML')))[0]
+        corners_against_aggregated = pd.read_html(StringIO(table_against.get_attribute('outerHTML')))[0]
 
         corners_for_aggregated = PreprocessingUtility.preprocessing(corners_for_aggregated)
         corners_against_aggregated = PreprocessingUtility.preprocessing(corners_against_aggregated)
