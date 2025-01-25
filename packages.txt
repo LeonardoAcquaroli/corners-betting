@@ -1,3 +1,0 @@
-chromium
-chromium-driver
-python3-lxml
