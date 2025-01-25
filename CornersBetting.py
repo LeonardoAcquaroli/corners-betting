@@ -14,6 +14,10 @@ from io import StringIO
 
 # -----------------------------------
 driver = WebDriverUtility.init_driver()
+season = date.today().year if (7 <= date.today().month <= 12) else date.today().year - 1
+with open('path/to/file.txt', 'r') as file:
+    # Read alpha from the txt update by the notebook
+    alpha = float(file.read().strip())
 
 # 1
 st.markdown("### Team-wise aggregated data")
@@ -34,7 +38,7 @@ stc = SingleTeamCornersUtility(driver=driver)
 if team != "":
     while True:
         try:
-            team_corners = stc.single_team(code, team)
+            team_corners = stc.single_team(code, team, season)
             break
         except:
             pass
@@ -52,14 +56,14 @@ st.markdown("### Corners average comparison and match prediction")
 # Significance level based on the number of corners draws in Serie A 22/23: alpha = 90.81%
 
 @st.cache_data(show_spinner=False)
-def t_test_predictions(teamA, teamB, alpha = 90.81):
+def t_test_predictions(teamA, teamB, season, alpha):
     if ((teamA != "") & (teamB != "")):
         codeA = team_codes.team_code[team_codes.team_name == teamA].reset_index(drop=True)[0]
         codeB = team_codes.team_code[team_codes.team_name == teamB].reset_index(drop=True)[0]
         time.sleep(1)
-        cornersA = stc.single_team(code=codeA, team=teamA)['Corners difference']
+        cornersA = stc.single_team(code=codeA, team=teamA, season=season)['Corners difference']
         time.sleep(1)
-        cornersB = stc.single_team(code=codeB, team=teamB)['Corners difference']
+        cornersB = stc.single_team(code=codeB, team=teamB, season=season)['Corners difference']
         p_value = TTestUtility(alpha=0.05).t_test(sample1=cornersA, sample2=cornersB)*100
         if p_value <= (alpha/2): # Reject hypotesis of equality in corners average. Righ/Left most tail of the t distribution
             if np.mean(cornersA) >= np.mean(cornersB):
@@ -85,7 +89,12 @@ fixtures = fixtures[fixtures.Score.isna()] # drop the played matches
 fixtures = fixtures.reset_index(drop=True) # reset index
 current_Wk = fixtures.Wk[:10].mode()[0]
 next_fixtures = fixtures[["Wk","Day","Date","Time","Home","Away"]][fixtures.Wk <= current_Wk].reset_index(drop=True)
-corners_outcome = next_fixtures.apply(lambda row: t_test_predictions(teamA = row['Home'], teamB = row['Away']), axis=1) # return winning team name and p_value
+corners_outcome = next_fixtures.apply(lambda row:
+                                      t_test_predictions(teamA = row['Home'],
+                                                                     teamB = row['Away'],
+                                                                     season = season,
+                                                                     alpha = alpha),
+                                                        axis=1) # return winning team name and p_value
 next_fixtures['Corners predictions'] = [outcome[0] for outcome in corners_outcome] # Team name
 p_values = [outcome[1] for outcome in corners_outcome] # p values
 
