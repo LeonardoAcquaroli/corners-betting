@@ -81,7 +81,7 @@ class SingleTeamCornersUtility():
             team (str): The team's name
             season (int): The starting year of the season (e.g., 2023 for 2023-24 season)
         '''
-        self.driver.get(f"https://fbref.com/en/squads/{code}/{season}-{season+1}/matchlogs/c11/passing_types/{team}-Match-Logs-Serie-A")
+        self.driver.get(f"https://fbref.com/en/squads/{code}/{str(season)}-{str(season+1)}/matchlogs/c11/passing_types/{team}-Match-Logs-Serie-A")
         team_corners_table = pd.merge(self.corners_for(), self.corners_against(), left_index=True, right_index=True, suffixes=('', '_y'))
         team_corners_table = team_corners_table.loc[:, ~team_corners_table.columns.isin(["Date_y","Round_y","Venue_y","Result_y","GF_y","GA_y","Opponent_y"])]
         team_corners_table["Outcome"] = team_corners_table.apply(lambda row: 'Win' if int(row['Corners for']) > int(row['Corners against']) else ('Draw' if int(row['Corners for']) == int(row['Corners against']) else 'Defeat'), axis=1) # create 1X2 column
