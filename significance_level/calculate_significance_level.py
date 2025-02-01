@@ -2,6 +2,10 @@ import sys
 sys.path.append('..')
 from utilities.utilities import *
 import time
+import os
+import tempfile
+import pandas as pd
+import subprocess
 
 games = pd.DataFrame()
 driver = WebDriverUtility.init_driver(headless=False)
@@ -23,5 +27,17 @@ perc_corners_draw = corners_draw/(len(games)/2)*100
 # Significance level to perform hypotesis testing
 alpha = round(100 - perc_corners_draw,2)
 
-with open(r"C:\Users\leoac\OneDrive - Università degli Studi di Milano\Data science\Football\Betting\Corners\corners-betting\significance_level\alpha.txt", 'w') as file:
+# Create a temporary directory with the txt file
+tmp_dir = tempfile.mkdtemp()
+tmp_file_path = os.path.join(tmp_dir, 'alpha.txt')
+with open(tmp_file_path, 'w') as file:
     file.write(str(alpha))
+
+# Push the file to the repository
+subprocess.run(['git', 'add', tmp_file_path])
+subprocess.run(['git', 'commit', '-m', 'Update significance level (alpha)'])
+subprocess.run(['git', 'push'])
+
+# Clean up: remove the file and directory
+os.remove(tmp_file_path)
+os.rmdir(tmp_dir)

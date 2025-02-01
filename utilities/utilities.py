@@ -126,12 +126,12 @@ class PreprocessingUtility:
 class TTestUtility:
     """A class for performing statistical tests on independent samples."""
     
-    def __init__(self, alpha: float = 0.05):
+    def __init__(self, alpha):
         """
         Initialize the statistical testing class.
         
         Args:
-            alpha: Significance level for hypothesis testing (default: 0.05)
+            alpha: Significance level for hypothesis testing
         """
         self.alpha = alpha
 
@@ -213,8 +213,8 @@ class TTestUtility:
         
         return t_stat, p_value
 
-    def t_test(self, sample1: Union[pd.DataFrame, npt.ArrayLike], 
-               sample2: Union[pd.DataFrame, npt.ArrayLike]) -> float:
+    def t_test(self, sample1: Union[pd.DataFrame, npt.ArrayLike],
+                     sample2: Union[pd.DataFrame, npt.ArrayLike]) -> float:
         """
         Perform appropriate t-test based on F-test results.
         
@@ -229,14 +229,13 @@ class TTestUtility:
         _, f_test_pvalue = self.f_test(sample1, sample2)
         
         # Choose appropriate t-test based on F-test result
-        equal_variances = f_test_pvalue >= self.alpha
+        equal_variances = f_test_pvalue >= 0.05
         _, t_test_pvalue = self._perform_ttest(sample1, sample2, equal_var=equal_variances)
         
         return t_test_pvalue
         
-    @staticmethod    
     @st.cache_data(show_spinner=False)
-    def t_test_predictions(team_codes, stc, teamA, teamB, season, alpha):
+    def t_test_predictions(self, team_codes, stc, teamA, teamB, season, alpha):
         if ((teamA != "") & (teamB != "")):
             codeA = team_codes.team_code[team_codes.team_name == teamA].reset_index(drop=True)[0]
             codeB = team_codes.team_code[team_codes.team_name == teamB].reset_index(drop=True)[0]
@@ -244,7 +243,7 @@ class TTestUtility:
             cornersA = stc.single_team(code=codeA, team=teamA, season=season)['Corners difference']
             time.sleep(1)
             cornersB = stc.single_team(code=codeB, team=teamB, season=season)['Corners difference']
-            p_value = TTestUtility(alpha=0.05).t_test(sample1=cornersA, sample2=cornersB)*100
+            p_value = self.t_test(sample1=cornersA, sample2=cornersB)*100
             if p_value <= (alpha/2): # Reject hypotesis of equality in corners average. Righ/Left most tail of the t distribution
                 if np.mean(cornersA) >= np.mean(cornersB):
                     corners_winning_team = teamA

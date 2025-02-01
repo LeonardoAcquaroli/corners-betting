@@ -2,10 +2,10 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import time
 # Data
 import pandas as pd
 import numpy as np
+from datetime import date
 from utilities.utilities import *
 # Web app
 import streamlit as st
@@ -71,10 +71,14 @@ current_Wk = fixtures.Wk[:10].mode()[0]
 next_fixtures = fixtures[["Wk","Day","Date","Time","Home","Away"]][fixtures.Wk <= current_Wk].reset_index(drop=True)
 # Significance level for t-test based on the number of corners draws in Serie A last years from 22/23: (100-pct_corners_draws)
 corners_outcome = next_fixtures.apply(lambda row:
-                                      t_test_predictions(teamA = row['Home'],
+                                      TTestUtility(alpha=alpha).t_test_predictions(
+                                                                    team_codes=team_codes,
+                                                                    stc = stc,
+                                                                    teamA = row['Home'],
                                                                      teamB = row['Away'],
                                                                      season = season,
-                                                                     alpha = alpha),
+                                                                     alpha = alpha
+                                                                     ),
                                                         axis=1) # return winning team name and p_value
 next_fixtures['Corners predictions'] = [outcome[0] for outcome in corners_outcome] # Team name
 p_values = [outcome[1] for outcome in corners_outcome] # p values
