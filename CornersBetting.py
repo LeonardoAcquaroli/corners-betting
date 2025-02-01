@@ -14,8 +14,8 @@ from io import StringIO
 
 # -----------------------------------
 driver = WebDriverUtility.init_driver()
-season = date.today().year if (7 <= date.today().month <= 12) else date.today().year - 1
-with open('path/to/file.txt', 'r') as file:
+season = (date.today().year if (7 <= date.today().month <= 12) else date.today().year - 1) - 2000
+with open(r'C:\Users\leoac\OneDrive - Università degli Studi di Milano\Data science\Football\Betting\Corners\corners-betting\significance_level\alpha.txt', 'r') as file:
     # Read alpha from the txt update by the notebook
     alpha = float(file.read().strip())
 
@@ -26,7 +26,7 @@ st.dataframe(preprocessing_utility.get_aggregated_data(_driver=driver))
 
 # 2
 # Single teams tables
-team_codes = pd.read_csv("https://raw.githubusercontent.com/LeonardoAcquaroli/corners-betting/main/team_codes/teams_24-25.csv")
+team_codes = pd.read_csv(f"https://raw.githubusercontent.com/LeonardoAcquaroli/corners-betting/main/team_codes/teams_{season}-{season+1}.csv")
 
 st.markdown("### Match-by-match data")
 team = st.selectbox("Choose the team", pd.Series(team_codes['team_name']))
@@ -41,6 +41,7 @@ if team != "":
             team_corners = stc.single_team(code, team, season)
             break
         except:
+            print('Trying to get the single team again')
             pass
     
     mean_for = round(team_corners["Corners for"].mean(),2)
@@ -53,7 +54,7 @@ if team != "":
 
 # 3
 st.markdown("### Corners average comparison and match prediction")
-# Significance level based on the number of corners draws in Serie A 22/23: alpha = 90.81%
+# Significance level based on the number of corners draws in Serie A last years from 22/23: (100-pct_corners_draws)
 
 @st.cache_data(show_spinner=False)
 def t_test_predictions(teamA, teamB, season, alpha):
@@ -78,7 +79,7 @@ def t_test_predictions(teamA, teamB, season, alpha):
 while True:
     try:
         driver.get('https://fbref.com/en/comps/11/schedule/Serie-A-Scores-and-Fixtures')
-        fixtures_table = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, f'//*[@id="sched_{stc.season}-{stc.season+1}_11_1"]')))
+        fixtures_table = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, f'//*[@id="sched_{season+2000}-{season+2000+1}_11_1"]')))
         break
     except Exception as error:
         st.write(error)
