@@ -52,12 +52,12 @@ class SingleTeamCornersUtility():
         corners_for_team.columns = columns
         corners_for_team = corners_for_team[["Date","Round","Venue","Result","GF","GA","Opponent","CK"]] # select only the important columns
         corners_for_team.rename({"CK": "Corners for"}, axis = 1, inplace=True) # change the corners for column name
-        corners_for_team = corners_for_team.loc[0:len(corners_for_team)-2] # delete the total row
-        # Convert 'GF' column to numeric and drop rows with NaN values in 'GF'
+        corners_for_team = corners_for_team.dropna(how='all') # drop the grey separator rows where all the entries in the row are nan 
+        corners_for_team = corners_for_team[~corners_for_team['Result'].str.contains(r'\d', na=False)] # Drop the total row: rows where the 'Result' column contains at least one digit
         corners_for_team['GF'] = pd.to_numeric(corners_for_team['GF'], errors='coerce')
         corners_for_team = corners_for_team.dropna(subset=['GF'])
         # Force Corners for column to int
-        corners_for_team['Corners for'] = corners_for_team['Corners for'].astype(int, errors='raise')
+        corners_for_team['Corners for'] = pd.to_numeric(corners_for_team['Corners for'], errors='coerce')
         corners_for_team = corners_for_team.reset_index(drop=True)
         return corners_for_team
 
@@ -68,9 +68,10 @@ class SingleTeamCornersUtility():
         corners_against_team.columns = columns
         corners_against_team = corners_against_team[["Date","Round","Venue","Result","GF","GA","Opponent","CK"]] # select only the important columns
         corners_against_team.rename({"CK": "Corners against"}, axis = 1, inplace=True) # change the corners for column name
-        corners_against_team = corners_against_team.loc[0:len(corners_against_team)-2] # delete the total row
+        corners_against_team = corners_against_team.dropna(how='all') # drop the grey separator rows where all the entries in the row are nan 
+        corners_against_team = corners_against_team[~corners_against_team['Result'].str.contains(r'\d', na=False)] # Drop the total row: rows where the 'Result' column contains at least one digit
         # Force Corners against column to int
-        corners_against_team['Corners against'] = corners_against_team['Corners against'].astype(int, errors='raise')
+        corners_against_team['Corners against'] = pd.to_numeric(corners_against_team['Corners against'], errors='coerce')
         corners_against_team = corners_against_team.reset_index(drop=True)
         return corners_against_team
 
@@ -80,8 +81,8 @@ class SingleTeamCornersUtility():
             code (str): The team's unique identifier code used in fbref.com URLs
             team (str): The team's name
             season (int): The starting year of the season (e.g., 2023 for 2023-24 season)
-        '''
-        self.driver.get(f"https://fbref.com/en/squads/{code}/{str(season)}-{str(season+1)}/matchlogs/c11/passing_types/{team}-Match-Logs-Serie-A")
+        ''' 
+        self.driver.get(f"https://fbref.com/en/squads/{str(code)}/{str(season+2000)}-{str(season+1+2000)}/matchlogs/c11/passing_types/{team}-Match-Logs-Serie-A")
         team_corners_table = pd.merge(self.corners_for(), self.corners_against(), left_index=True, right_index=True, suffixes=('', '_y'))
         team_corners_table = team_corners_table.loc[:, ~team_corners_table.columns.isin(["Date_y","Round_y","Venue_y","Result_y","GF_y","GA_y","Opponent_y"])]
         team_corners_table["Outcome"] = team_corners_table.apply(lambda row: 'Win' if int(row['Corners for']) > int(row['Corners against']) else ('Draw' if int(row['Corners for']) == int(row['Corners against']) else 'Defeat'), axis=1) # create 1X2 column
