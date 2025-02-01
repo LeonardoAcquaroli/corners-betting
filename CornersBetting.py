@@ -54,27 +54,6 @@ if team != "":
 
 # 3
 st.markdown("### Corners average comparison and match prediction")
-# Significance level based on the number of corners draws in Serie A last years from 22/23: (100-pct_corners_draws)
-
-@st.cache_data(show_spinner=False)
-def t_test_predictions(teamA, teamB, season, alpha):
-    if ((teamA != "") & (teamB != "")):
-        codeA = team_codes.team_code[team_codes.team_name == teamA].reset_index(drop=True)[0]
-        codeB = team_codes.team_code[team_codes.team_name == teamB].reset_index(drop=True)[0]
-        time.sleep(1)
-        cornersA = stc.single_team(code=codeA, team=teamA, season=season)['Corners difference']
-        time.sleep(1)
-        cornersB = stc.single_team(code=codeB, team=teamB, season=season)['Corners difference']
-        p_value = TTestUtility(alpha=0.05).t_test(sample1=cornersA, sample2=cornersB)*100
-        if p_value <= (alpha/2): # Reject hypotesis of equality in corners average. Righ/Left most tail of the t distribution
-            if np.mean(cornersA) >= np.mean(cornersB):
-                corners_winning_team = teamA
-            else:
-                corners_winning_team = teamB
-            return (corners_winning_team, p_value)
-        else:
-            return ('X', p_value)
-
 # Try multiple times (because it does not work in deployment)
 while True:
     try:
@@ -90,6 +69,7 @@ fixtures = fixtures[fixtures.Score.isna()] # drop the played matches
 fixtures = fixtures.reset_index(drop=True) # reset index
 current_Wk = fixtures.Wk[:10].mode()[0]
 next_fixtures = fixtures[["Wk","Day","Date","Time","Home","Away"]][fixtures.Wk <= current_Wk].reset_index(drop=True)
+# Significance level for t-test based on the number of corners draws in Serie A last years from 22/23: (100-pct_corners_draws)
 corners_outcome = next_fixtures.apply(lambda row:
                                       t_test_predictions(teamA = row['Home'],
                                                                      teamB = row['Away'],

@@ -10,7 +10,7 @@ import pandas as pd
 import numpy.typing as npt
 import shutil
 import pandas as pd
-from datetime import date
+import time
 import streamlit as st
 from io import StringIO
 
@@ -233,3 +233,23 @@ class TTestUtility:
         _, t_test_pvalue = self._perform_ttest(sample1, sample2, equal_var=equal_variances)
         
         return t_test_pvalue
+        
+    @staticmethod    
+    @st.cache_data(show_spinner=False)
+    def t_test_predictions(team_codes, stc, teamA, teamB, season, alpha):
+        if ((teamA != "") & (teamB != "")):
+            codeA = team_codes.team_code[team_codes.team_name == teamA].reset_index(drop=True)[0]
+            codeB = team_codes.team_code[team_codes.team_name == teamB].reset_index(drop=True)[0]
+            time.sleep(1)
+            cornersA = stc.single_team(code=codeA, team=teamA, season=season)['Corners difference']
+            time.sleep(1)
+            cornersB = stc.single_team(code=codeB, team=teamB, season=season)['Corners difference']
+            p_value = TTestUtility(alpha=0.05).t_test(sample1=cornersA, sample2=cornersB)*100
+            if p_value <= (alpha/2): # Reject hypotesis of equality in corners average. Righ/Left most tail of the t distribution
+                if np.mean(cornersA) >= np.mean(cornersB):
+                    corners_winning_team = teamA
+                else:
+                    corners_winning_team = teamB
+                return (corners_winning_team, p_value)
+            else:
+                return ('X', p_value)
