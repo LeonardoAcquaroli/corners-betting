@@ -235,15 +235,15 @@ class TTestUtility:
         return t_test_pvalue
         
     @st.cache_data(show_spinner=False)
-    def t_test_predictions(self, team_codes, stc, teamA, teamB, season, alpha):
+    def t_test_predictions(_self, _stc, team_codes, teamA, teamB, season, alpha):
         if ((teamA != "") & (teamB != "")):
             codeA = team_codes.team_code[team_codes.team_name == teamA].reset_index(drop=True)[0]
             codeB = team_codes.team_code[team_codes.team_name == teamB].reset_index(drop=True)[0]
             time.sleep(1)
-            cornersA = stc.single_team(code=codeA, team=teamA, season=season)['Corners difference']
+            cornersA = _stc.single_team(code=codeA, team=teamA, season=season)['Corners difference']
             time.sleep(1)
-            cornersB = stc.single_team(code=codeB, team=teamB, season=season)['Corners difference']
-            p_value = self.t_test(sample1=cornersA, sample2=cornersB)*100
+            cornersB = _stc.single_team(code=codeB, team=teamB, season=season)['Corners difference']
+            p_value = _self.t_test(sample1=cornersA, sample2=cornersB)*100
             if p_value <= (alpha/2): # Reject hypotesis of equality in corners average. Righ/Left most tail of the t distribution
                 if np.mean(cornersA) >= np.mean(cornersB):
                     corners_winning_team = teamA
