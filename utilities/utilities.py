@@ -7,9 +7,9 @@ from typing import Tuple, Union
 import numpy as np
 import scipy.stats
 import pandas as pd
+import matplotlib.pyplot as plt
 import numpy.typing as npt
 import shutil
-import pandas as pd
 import time
 import streamlit as st
 from io import StringIO
@@ -252,3 +252,57 @@ class TTestUtility:
                 return (corners_winning_team, p_value)
             else:
                 return ('X', p_value)
+            
+class PlottingUtility:
+    def plot_corners_distributions(mean_for, sd_for, mean_against, sd_against):
+        # Create the data points for x-axis
+        left_lim = min(mean_for, mean_against) - 3*max(sd_for, sd_against)
+        right_lim = max(mean_for, mean_against) + 3*max(sd_for, sd_against)
+        x = np.linspace(left_lim, right_lim, 200)
+        
+        # Calculate normal distributions
+        y_for = (1/(sd_for * np.sqrt(2*np.pi))) * np.exp(-0.5*((x-mean_for)/sd_for)**2)
+        y_against = (1/(sd_against * np.sqrt(2*np.pi))) * np.exp(-0.5*((x-mean_against)/sd_against)**2)
+        
+        # Create the plot
+        fig, ax = plt.subplots(figsize=(12, 3))
+        
+        # Create masks for standard deviation ranges
+        mask_for = (x >= mean_for - sd_for) & (x <= mean_for + sd_for)
+        mask_against = (x >= mean_against - sd_against) & (x <= mean_against + sd_against)
+        
+        # Plot the shadows for standard deviation ranges
+        ax.fill_between(x, y_for, where=mask_for, color='black', alpha=0.1)
+        ax.fill_between(x, y_against, where=mask_against, color='black', alpha=0.1)
+        
+        # Plot distributions
+        ax.fill_between(x, y_against, alpha=0.3, color='red', label='Corners Against')
+        ax.plot(x, y_against, color='red', linewidth=2)
+        
+        ax.fill_between(x, y_for, alpha=0.3, color='blue', label='Corners For')
+        ax.plot(x, y_for, color='blue', linewidth=2)
+        
+        # Find the maximum height of both distributions
+        y_max = max(max(y_for), max(y_against))
+        
+        # Add vertical lines for means (extending to the curve)
+        # Get y-values at means
+        y_at_mean_for = (1/(sd_for * np.sqrt(2*np.pi)))
+        y_at_mean_against = (1/(sd_against * np.sqrt(2*np.pi)))
+        
+        ax.vlines(x=mean_for, ymin=0, ymax=y_at_mean_for, color='blue', linestyle='--', alpha=0.5)
+        ax.vlines(x=mean_against, ymin=0, ymax=y_at_mean_against, color='red', linestyle='--', alpha=0.5)
+        
+        # Customize plot
+        ax.set_title('Distribution of Corners For and Against', pad=20)
+        ax.set_xlabel('Number of Corners')
+        ax.set_ylabel('Density')
+        ax.legend()
+        ax.grid(True, alpha=0.3)
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        ax.spines['bottom'].set_visible(False)
+        ax.spines['left'].set_visible(False)
+        ax.set_xlim(-max(abs(left_lim), abs(right_lim)), max(abs(left_lim), abs(right_lim)))
+        
+        return fig

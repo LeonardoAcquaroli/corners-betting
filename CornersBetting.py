@@ -49,9 +49,14 @@ if team != "":
     mean_against = round(team_corners["Corners against"].mean(),2)
     sd_against = round(team_corners["Corners against"].std(),2)
     st.dataframe(team_corners)
-    st.write(f"Average number of corners for {team}: {mean_for}, Standard deviation of corners for {team}: {sd_for}")
-    st.write(f"Average number of corners against {team}: {mean_against}, Standard deviation of corners against {team}: {sd_against}")
-
+    # Create and display a plot of the distributions of corners for and against
+    fig = PlottingUtility.plot_corners_distributions(mean_for, sd_for, mean_against, sd_against)
+    st.pyplot(fig)
+    st.write(f"""
+    - Corners For {team}: Mean = {mean_for}, SD = {sd_for}
+    - Corners Against {team}: Mean = {mean_against}, SD = {sd_against}
+    """)
+input()
 # 3
 st.markdown("### Corners average comparison and match prediction")
 # Try multiple times (because it does not work in deployment)
