@@ -254,7 +254,14 @@ class TTestUtility:
                 return ('X', p_value)
             
 class PlottingUtility:
-    def plot_corners_distributions(mean_for, sd_for, mean_against, sd_against):
+    def __init__(self):
+        pass
+
+    @staticmethod
+    def plot_corners_distributions(mean_for: float, sd_for: float,
+                                   mean_against: float, sd_against: float,
+                                   mode: str = 'single_team',
+                                   home_team: str = None, away_team: str = None):
         # Create the data points for x-axis
         left_lim = min(mean_for, mean_against) - 3*max(sd_for, sd_against)
         right_lim = max(mean_for, mean_against) + 3*max(sd_for, sd_against)
@@ -276,10 +283,10 @@ class PlottingUtility:
         ax.fill_between(x, y_against, where=mask_against, color='black', alpha=0.1)
         
         # Plot distributions
-        ax.fill_between(x, y_against, alpha=0.3, color='red', label='Corners Against')
+        ax.fill_between(x, y_against, alpha=0.3, color='red', label='Corners Against' if mode == 'single_team' else away_team)
         ax.plot(x, y_against, color='red', linewidth=2)
         
-        ax.fill_between(x, y_for, alpha=0.3, color='blue', label='Corners For')
+        ax.fill_between(x, y_for, alpha=0.3, color='blue', label='Corners For' if mode == 'single_team' else home_team)
         ax.plot(x, y_for, color='blue', linewidth=2)
         
         # Find the maximum height of both distributions
@@ -294,8 +301,8 @@ class PlottingUtility:
         ax.vlines(x=mean_against, ymin=0, ymax=y_at_mean_against, color='red', linestyle='--', alpha=0.5)
         
         # Customize plot
-        ax.set_title('Distribution of Corners For and Against', pad=20)
-        ax.set_xlabel('Number of Corners')
+        ax.set_title(f'''Distribution of Corners{" For and Against" if mode == "single_team" else f": {home_team} - {away_team}"}''', pad=20)
+        ax.set_xlabel('Number of Corners' if mode == 'single_team' else 'Corners number difference')
         ax.set_ylabel('Density')
         ax.legend()
         ax.grid(True, alpha=0.3)

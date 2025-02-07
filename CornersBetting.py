@@ -22,7 +22,8 @@ with open(r'C:\Users\leoac\OneDrive - Università degli Studi di Milano\Data sci
 # 1
 st.markdown("### Team-wise aggregated data")
 preprocessing_utility = PreprocessingUtility()
-st.dataframe(preprocessing_utility.get_aggregated_data(_driver=driver))
+aggregated_data = preprocessing_utility.get_aggregated_data(_driver=driver)
+st.dataframe(aggregated_data)
 
 # 2
 # Single teams tables
@@ -44,19 +45,19 @@ if team != "":
             print('Trying to get the single team again')
             pass
     
-    mean_for = round(team_corners["Corners for"].mean(),2)
-    sd_for = round(team_corners["Corners for"].std(),2)
-    mean_against = round(team_corners["Corners against"].mean(),2)
-    sd_against = round(team_corners["Corners against"].std(),2)
+    mean_for = team_corners["Corners for"].mean()
+    sd_for = team_corners["Corners for"].std()
+    mean_against = team_corners["Corners against"].mean()
+    sd_against = team_corners["Corners against"].std()
     st.dataframe(team_corners)
     # Create and display a plot of the distributions of corners for and against
     fig = PlottingUtility.plot_corners_distributions(mean_for, sd_for, mean_against, sd_against)
     st.pyplot(fig)
     st.write(f"""
-    - Corners For {team}: Mean = {mean_for}, SD = {sd_for}
-    - Corners Against {team}: Mean = {mean_against}, SD = {sd_against}
+    - Corners For {team}: Mean = {round(mean_for, 2)}, SD = {round(sd_for, 2)}
+    - Corners Against {team}: Mean = {round(mean_against, 2)}, SD = {round(sd_against, 2)}
     """)
-input()
+
 # 3
 st.markdown("### Corners average comparison and match prediction")
 # Try multiple times (because it does not work in deployment)
@@ -101,3 +102,27 @@ reliabilities = [round( ((sign_level/2 - p) / sign_level/2)*100, 2 ) if p <= sig
 next_fixtures['Reliability of the forecast'] = reliabilities
 next_fixtures.set_index('Wk', inplace=True)
 st.dataframe(next_fixtures)
+
+# Plot a single game's normal distributions
+games_tuples = [(game['Home'],game['Away']) for _, game in next_fixtures[['Home', 'Away']].iterrows()]
+games = [f"{game[0]} - {game[1]}" for game in games_tuples]
+tuples_to_str = dict(zip(games, games_tuples))
+selected_game = st.selectbox("Plot the prediction curves", games, index=None, placeholder='Select a game')
+if selected_game is not None:
+    home_team, away_team = tuples_to_str[selected_game]
+
+    mean_home = aggregated_data[aggregated_data['Squad'] == home_team]['Corners average difference'].values[0]
+    sd_home = stc.single_team(team_codes[team_codes['team_name'] == home_team]['team_code'].values[0],
+                                home_team,
+                                season)["Corners difference"].std()
+    mean_away = aggregated_data[aggregated_data['Squad'] == away_team]['Corners average difference'].values[0]
+    sd_away = stc.single_team(team_codes[team_codes['team_name'] == away_team]['team_code'].values[0],
+                                away_team,
+                                season)["Corners difference"].std()
+    fig_t_test = PlottingUtility.plot_corners_distributions(mean_home, sd_home,
+                                                            mean_away, sd_away,
+                                                            mode='prediction', # useless to specify, it only needs to be != 'single_team'
+                                                            home_team=home_team,
+                                                            away_team=away_team
+                                                            )
+    st.pyplot(fig_t_test)
