@@ -91,7 +91,7 @@ conditions = [
 next_fixtures['Corners predictions'] = np.where(conditions[0], 'X', np.where(conditions[1], '1', '2'))
 
 # Add forecast reliability calculated as the difference between the significance threshold (45.405 or 50) and the p_value for each game
-sign_level = 90.81
+sign_level = alpha
 reliabilities = [round( ((sign_level/2 - p) / sign_level/2)*100, 2 ) if p <= sign_level/2 else round( ((50 - p) / 50)*100, 2 ) for p in p_values]
 next_fixtures['Reliability of the forecast'] = reliabilities
 next_fixtures.set_index('Wk', inplace=True)
