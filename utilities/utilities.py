@@ -96,6 +96,7 @@ class PreprocessingUtility:
         columns = df.columns.droplevel(0) # cut out the first header of the multi Index
         df.columns = columns
         df = df[["Squad","90s","CK"]] # select only the important columns
+        df['CK'] = df['CK'].astype('float64')
         df.loc[:, 'CK'] = round(df['CK']/df['90s'], 2) # get the mean number of corners instead of the total
         return df
     
